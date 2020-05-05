@@ -1,4 +1,4 @@
-public class Test {// This is a test comment.
+public class Test {
     public static void main(String[] args) {
         String phrase = "Tin man";
         System.out.println(reverse(phrase));

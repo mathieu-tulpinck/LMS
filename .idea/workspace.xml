@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0a1168c-93b6-4ffb-92cc-2c79968ff993" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Librarian.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Member.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +32,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
   </component>
   <component name="RunManager">
     <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -60,11 +61,45 @@
       <workItem from="1588689015747" duration="613000" />
       <workItem from="1588689664978" duration="426000" />
       <workItem from="1588690172060" duration="99000" />
-      <workItem from="1588690295208" duration="354000" />
+      <workItem from="1588690295208" duration="1498000" />
+      <workItem from="1588758378966" duration="2467000" />
+      <workItem from="1588772211895" duration="1574000" />
     </task>
+    <task id="LOCAL-00001" summary="&quot;This is my third commit&quot;">
+      <created>1588691076913</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1588691076914</updated>
+    </task>
+    <task id="LOCAL-00002" summary="&quot;This is my third commit&quot;">
+      <created>1588691207912</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1588691207912</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <MESSAGE value="&quot;This is my third commit&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;This is my third commit&quot;" />
+  </component>
   <component name="WindowStateProjectService">
+    <state x="293" y="202" key="#com.intellij.ide.util.MemberChooser" timestamp="1588773944360">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state x="293" y="202" key="#com.intellij.ide.util.MemberChooser/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588773944360" />
+    <state x="129" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1588773771004">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state x="129" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588773771004" />
+    <state x="567" y="87" key="CommitChangelistDialog2" timestamp="1588691207594">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state x="567" y="87" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691207594" />
     <state width="918" height="263" key="GridCell.Tab.0.bottom" timestamp="1588686754839">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
@@ -81,15 +116,31 @@
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state width="918" height="263" key="GridCell.Tab.0.right/0.23.1920.977@0.23.1920.977" timestamp="1588686754839" />
-    <state x="0" y="24" width="960" height="976" key="SettingsEditor" timestamp="1588690430214">
+    <state x="0" y="24" width="960" height="976" key="SettingsEditor" timestamp="1588772489749">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state x="0" y="24" key="SettingsEditor/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588690430214" />
+    <state x="0" y="24" key="SettingsEditor/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588772489749" />
     <state x="87" y="24" width="960" height="976" key="SettingsEditor/0.23.1920.977@0.23.1920.977" timestamp="1588690267955" />
+    <state x="560" y="251" key="Vcs.Push.Dialog.v2" timestamp="1588691218257">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691218257" />
     <state x="100" y="123" width="1720" height="776" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1588689294263">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state x="100" y="123" width="1720" height="776" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1920.977@0.23.1920.977" timestamp="1588689294263" />
+    <state x="763" y="432" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588691163468">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state x="763" y="432" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691163468" />
+    <state x="666" y="307" key="git4idea.merge.GitPullDialog" timestamp="1588691473220">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state x="666" y="307" key="git4idea.merge.GitPullDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691473220" />
+    <state x="383" y="134" key="new project wizard" timestamp="1588691495133">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state x="383" y="134" key="new project wizard/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691495133" />
     <state x="625" y="275" width="670" height="676" key="search.everywhere.popup" timestamp="1588689339840">
       <screen x="0" y="23" width="1920" height="977" />
     </state>

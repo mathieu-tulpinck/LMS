@@ -1,3 +1,6 @@
+import db.LibrarianDAO;
+import gui.GUI;
+
 public class Librarian {
 
     private int employeeID;
@@ -28,5 +31,15 @@ public class Librarian {
     public void printInfo() {
         System.out.println("employeeID = " + employeeID);
         System.out.println("name = " + name);
+    }
+
+    public static void main(String[] args) {
+        GUI.showLoginScreen();
+
+
+
+        /*LibrarianDAO ldao = new LibrarianDAO();
+        ldao.verifyUserPassword("ej","elias123");
+        ldao.loadLibrarian("ej","elias123");*/
     }
 }

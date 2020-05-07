@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0a1168c-93b6-4ffb-92cc-2c79968ff993" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Librarian.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Member.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_8_0_20.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/db/BaseDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/db/LibrarianDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/gui/LoginGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LMS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/LMS.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Librarian.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Librarian.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/dbSingleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/DatabaseSingleton.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,9 +38,21 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Werkcollege1" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Librarian">
+    <configuration name="Librarian" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Librarian" />
+      <module name="LMS" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Test" />
       <module name="LMS" />
@@ -44,9 +62,13 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Librarian" />
         <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -64,6 +86,7 @@
       <workItem from="1588690295208" duration="1498000" />
       <workItem from="1588758378966" duration="2467000" />
       <workItem from="1588772211895" duration="1574000" />
+      <workItem from="1588842126893" duration="9828000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;This is my third commit&quot;">
       <created>1588691076913</created>
@@ -79,13 +102,35 @@
       <option name="project" value="LOCAL" />
       <updated>1588691207912</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="first db commit, test">
+      <created>1588860209458</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1588860209459</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <MESSAGE value="&quot;This is my third commit&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;This is my third commit&quot;" />
+    <MESSAGE value="first db commit, test" />
+    <option name="LAST_COMMIT_MESSAGE" value="first db commit, test" />
   </component>
   <component name="WindowStateProjectService">
     <state x="293" y="202" key="#com.intellij.ide.util.MemberChooser" timestamp="1588773944360">
@@ -96,34 +141,53 @@
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state x="129" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588773771004" />
-    <state x="567" y="87" key="CommitChangelistDialog2" timestamp="1588691207594">
-      <screen x="0" y="23" width="1920" height="977" />
+    <state x="454" y="14" key="CommitChangelistDialog2" timestamp="1588860208523">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="454" y="14" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1588860208523" />
     <state x="567" y="87" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691207594" />
-    <state width="918" height="263" key="GridCell.Tab.0.bottom" timestamp="1588686754839">
-      <screen x="0" y="23" width="1920" height="977" />
+    <state x="89" y="154" key="FileChooserDialogImpl" timestamp="1588864359566">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="89" y="154" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1588864359566" />
+    <state width="1493" height="164" key="GridCell.Tab.0.bottom" timestamp="1588866954234">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="164" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588866954234" />
     <state width="918" height="263" key="GridCell.Tab.0.bottom/0.23.1920.977@0.23.1920.977" timestamp="1588686754839" />
-    <state width="918" height="263" key="GridCell.Tab.0.center" timestamp="1588686754838">
-      <screen x="0" y="23" width="1920" height="977" />
+    <state width="1493" height="164" key="GridCell.Tab.0.center" timestamp="1588866954234">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="164" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1588866954234" />
     <state width="918" height="263" key="GridCell.Tab.0.center/0.23.1920.977@0.23.1920.977" timestamp="1588686754838" />
-    <state width="918" height="263" key="GridCell.Tab.0.left" timestamp="1588686754837">
-      <screen x="0" y="23" width="1920" height="977" />
+    <state width="1493" height="164" key="GridCell.Tab.0.left" timestamp="1588866954233">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="164" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1588866954233" />
     <state width="918" height="263" key="GridCell.Tab.0.left/0.23.1920.977@0.23.1920.977" timestamp="1588686754837" />
-    <state width="918" height="263" key="GridCell.Tab.0.right" timestamp="1588686754839">
-      <screen x="0" y="23" width="1920" height="977" />
+    <state width="1493" height="164" key="GridCell.Tab.0.right" timestamp="1588866954234">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="164" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1588866954234" />
     <state width="918" height="263" key="GridCell.Tab.0.right/0.23.1920.977@0.23.1920.977" timestamp="1588686754839" />
-    <state x="0" y="24" width="960" height="976" key="SettingsEditor" timestamp="1588772489749">
-      <screen x="0" y="23" width="1920" height="977" />
+    <state x="162" y="69" width="1374" height="678" key="MergeDialog" timestamp="1588867265589">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="162" y="69" width="1374" height="678" key="MergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1588867265589" />
+    <state x="481" y="128" key="MultipleFileMergeDialog" timestamp="1588867265601">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="481" y="128" key="MultipleFileMergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1588867265601" />
+    <state x="0" y="0" width="960" height="976" key="SettingsEditor" timestamp="1588862733119">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="0" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1588862733119" />
     <state x="0" y="24" key="SettingsEditor/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588772489749" />
     <state x="87" y="24" width="960" height="976" key="SettingsEditor/0.23.1920.977@0.23.1920.977" timestamp="1588690267955" />
-    <state x="560" y="251" key="Vcs.Push.Dialog.v2" timestamp="1588691218257">
-      <screen x="0" y="23" width="1920" height="977" />
+    <state x="448" y="192" key="Vcs.Push.Dialog.v2" timestamp="1588867275367">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="448" y="192" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1588867275367" />
     <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691218257" />
     <state x="100" y="123" width="1720" height="776" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1588689294263">
       <screen x="0" y="23" width="1920" height="977" />

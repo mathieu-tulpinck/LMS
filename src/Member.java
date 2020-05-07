@@ -1,11 +1,16 @@
+import java.util.*;
+
 public class Member {
     private int membershipID;
     private String name;
     private String address;
     private int phone;
 
-    public Member(int membershipID, String name, String address, int phone) {
-        setMembershipID(membershipID);
+    static int currentMembershipID = 0;
+
+    public Member(String name, String address, int phone) {
+        currentMembershipID++;
+        this.membershipID = currentMembershipID;
         setName(name);
         setAddress(address);
         setPhone(phone);
@@ -13,10 +18,6 @@ public class Member {
 
     public int getMembershipID(){
         return this.membershipID;
-    }
-
-    public void setMembershipID(int membershipID) {
-        this.membershipID = membershipID;
     }
 
     public String getName() {
@@ -43,15 +44,46 @@ public class Member {
         this.phone = phone;
     }
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "membershipID=" + membershipID +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", phone=" + phone +
-                '}';
+    public void printInfo() {
+        System.out.println("membershipID = " + membershipID);
+        System.out.println("name = " + name);
+        System.out.println("address = " + address);
+        System.out.println("phone = " + phone);
     }
+
+    public void updateBorrowInfo() {
+        System.out.println("Which information do you wish to modify: 1. name / 2. address / 3. phone");
+
+        Scanner console = new Scanner(System.in);
+        int choice = console.nextInt();
+
+        while(choice < 0 && choice > 3) {
+            switch (choice) {
+                case 1:
+                    System.out.println("Provide new name: ");
+                    String name = console.next();
+                    setName(name);
+                    System.out.println("Update executed.");
+                    break;
+                case 2:
+                    System.out.println("Provide new address: ");
+                    String address = console.next();
+                    setAddress(address);
+                    System.out.println("Update executed.");
+                    break;
+                case 3:
+                    System.out.println("Provide new phone: ");
+                    int phone = console.nextInt();
+                    setPhone(phone);
+                    System.out.println("Update executed.");
+                    break;
+            }
+        }
+
+
+    }
+
+
 }
 
 

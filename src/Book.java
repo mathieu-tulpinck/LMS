@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+Class.forName()
 
 public class Book {
     private int book_ID;
@@ -9,20 +10,10 @@ public class Book {
     private int ISBN;
     private int year;
     private String location;
-    private ArrayList<BookCopy> copies;
+    private String condition;
+    private BookState state;
 
-    public Book(int book_ID, int cat_ID, String author, String publisher, String title, int ISBN, int year, String location, ArrayList<BookCopy> copies) {
-        copies = new ArrayList<>();
-        this.book_ID = book_ID;
-        this.cat_ID = cat_ID;
-        this.author = author;
-        this.publisher = publisher;
-        this.title = title;
-        this.ISBN = ISBN;
-        this.year = year;
-        this.location = location;
-        this.copies = copies;
-    }
+
 
     public Book(int book_ID, ArrayList<BookCopy> copies) {
         copies = new ArrayList<>();

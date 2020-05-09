@@ -1,7 +1,7 @@
 import java.util.*;
 
 // class used to coordinate business logic
-public class Library {
+/*public class Library {
     private ArrayList<Member> memberList;
     private ArrayList<Book> catalog;
 
@@ -30,3 +30,4 @@ public class Library {
 
 
 }
+*/

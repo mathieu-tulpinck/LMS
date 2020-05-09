@@ -67,6 +67,7 @@ public class LoginGUI implements ActionListener {
 
         if (ldao.verifyUserPassword(user, password)) {
             succes.setText("Aanmelden succesvol!");
-        }
+        } else
+            succes.setText("Foutieve gebruikersnaam of wachtwoord!");
     }
 }

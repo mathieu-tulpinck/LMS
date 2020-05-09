@@ -7,7 +7,7 @@ public class MainOlivier {
     public static void main(String[] args) {
         try {
             //Laden van een Driver --> Register JDBC Driver
-            Class.forName("com.mysql.jdbc.Driver");
+            //Class.forName("com.mysql.jdbc.Driver"); //Deprecated code --> is niet meer nodig
             // verbinden met database --> class instance from class Connection (e.g. "connection") is set using method getConnection (from class DriverManager
             Connection connection = DriverManager.getConnection("jdbc:mysql://dt5.ehb.be/1920mobappgr2","1920mobappgr2","jWqB5N4");
             if (connection != null) {

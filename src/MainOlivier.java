@@ -10,14 +10,17 @@ public class MainOlivier {
             //Class.forName("com.mysql.jdbc.Driver"); //Deprecated code --> is niet meer nodig
             // verbinden met database --> class instance from class Connection (e.g. "connection") is set using method getConnection (from class DriverManager
             Connection connection = DriverManager.getConnection("jdbc:mysql://dt5.ehb.be/1920mobappgr2","1920mobappgr2","jWqB5N4");
+
+            //doe iets
+
             if (connection != null) {
                     connection.close();
                 }
         }
-        catch (ClassNotFoundException error1) {
+        /*catch (ClassNotFoundException error1) {
             System.out.println("Error: unable to load driver class!");
             System.exit(1);
-        }
+        }*/
         catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());

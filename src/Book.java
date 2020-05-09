@@ -52,4 +52,10 @@ public class Book {
     public void setState(BookState state) {
         this.state = state;
     }
+
+ /*   public void addBook(Book b) {
+        b.setBook_ID(1);
+        b.setTitle("Kunanjango");
+        b.setBookState("Free");
+    }*/
 }

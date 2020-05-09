@@ -1,5 +1,7 @@
-import db.LibrarianDAO;
-import gui.GUI;
+package library;
+
+import db.BookDAO;
+
 
 public class Librarian {
 
@@ -34,9 +36,19 @@ public class Librarian {
     }
 
     public static void main(String[] args) {
-        GUI.showLoginScreen();
+      //  LoginGUI.showLoginScreen();
 
 
+    //BookCategory cat3 = new BookCategory(3,"SF");
+        Book b1 = new Book(1,1,"Jos","Lannoo","Komaan",12345,2001,"A3");
+        BookDAO bdao = new BookDAO();
+        bdao.addBook(b1);
+
+    BookCategory cat3 = new BookCategory(1,"Actie");
+    BookCategory cat2 = new BookCategory(2,"Fantasie");
+
+    //BookDAO bda1 = new BookDAO();
+    //bda1.addCategory(cat2);
 
         /*LibrarianDAO ldao = new LibrarianDAO();
         ldao.verifyUserPassword("ej","elias123");

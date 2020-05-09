@@ -1,5 +1,5 @@
 import db.LibrarianDAO;
-import gui.GUI;
+import gui.LoginGUI;
 
 public class Librarian {
 
@@ -34,7 +34,7 @@ public class Librarian {
     }
 
     public static void main(String[] args) {
-        GUI.showLoginScreen();
+        LoginGUI.showLoginScreen();
 
 
 

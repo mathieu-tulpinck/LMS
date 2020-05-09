@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0a1168c-93b6-4ffb-92cc-2c79968ff993" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/MainOlivier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BookCopy.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,8 +14,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -43,7 +43,7 @@
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunManager" selected="Application.Librarian">
     <configuration name="Librarian" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -87,7 +87,7 @@
       <workItem from="1588758378966" duration="2467000" />
       <workItem from="1588772211895" duration="1574000" />
       <workItem from="1588842126893" duration="9828000" />
-      <workItem from="1588876628784" duration="4916000" />
+      <workItem from="1588876628784" duration="8100000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;This is my third commit&quot;">
       <created>1588691076913</created>
@@ -117,7 +117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588881164968</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="first db commit, test">
+      <created>1589012879595</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1589012879595</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,9 +150,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="first db commit, test" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="293" y="202" key="#com.intellij.ide.util.MemberChooser" timestamp="1588773944360">
-      <screen x="0" y="23" width="1920" height="977" />
+    <state x="2213" y="191" key="#com.intellij.ide.util.MemberChooser" timestamp="1589013072478">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
+    <state x="2213" y="191" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589013072478" />
     <state x="293" y="202" key="#com.intellij.ide.util.MemberChooser/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588773944360" />
     <state x="129" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1588773771004">
       <screen x="0" y="23" width="1920" height="977" />
@@ -156,10 +164,11 @@
     </state>
     <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1588879891287" />
     <state x="2544" y="201" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589012782090" />
-    <state x="454" y="14" key="CommitChangelistDialog2" timestamp="1588881163477">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="2488" y="18" key="CommitChangelistDialog2" timestamp="1589012877981">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="454" y="14" key="CommitChangelistDialog2/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1588881163477" />
+    <state x="2488" y="18" key="CommitChangelistDialog2/0.0.1536.824/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589012877981" />
     <state x="454" y="14" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1588860208523" />
     <state x="567" y="87" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691207594" />
     <state x="89" y="154" key="FileChooserDialogImpl" timestamp="1588864359566">
@@ -194,16 +203,18 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="481" y="128" key="MultipleFileMergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1588867265601" />
-    <state x="0" y="0" width="960" height="976" key="SettingsEditor" timestamp="1588862733119">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="1920" y="0" width="1200" height="1040" key="SettingsEditor" timestamp="1589016021447">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
+    <state x="1920" y="0" width="1200" height="1040" key="SettingsEditor/0.0.1536.824/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589016021447" />
     <state x="0" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1588862733119" />
     <state x="0" y="24" key="SettingsEditor/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588772489749" />
     <state x="87" y="24" width="960" height="976" key="SettingsEditor/0.23.1920.977@0.23.1920.977" timestamp="1588690267955" />
-    <state x="448" y="192" key="Vcs.Push.Dialog.v2" timestamp="1588881176929">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="2480" y="242" key="Vcs.Push.Dialog.v2" timestamp="1589012886252">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="448" y="192" key="Vcs.Push.Dialog.v2/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1588881176929" />
+    <state x="2480" y="242" key="Vcs.Push.Dialog.v2/0.0.1536.824/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589012886252" />
     <state x="448" y="192" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1588867275367" />
     <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1588691218257" />
     <state x="100" y="123" width="1720" height="776" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1588689294263">

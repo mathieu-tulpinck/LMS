@@ -21,7 +21,7 @@ public class Library {
     }
     public boolean insertMember(Member member) {
         memberList.add(member);
-
+        return false;
     }
 
 

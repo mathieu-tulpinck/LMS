@@ -1,5 +1,5 @@
 import db.LibrarianDAO;
-import gui.GUI;
+//import gui.GUI;
 
 public class Librarian {
 
@@ -33,13 +33,12 @@ public class Librarian {
         System.out.println("name = " + name);
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         GUI.showLoginScreen();
-
+*/
 
 
         /*LibrarianDAO ldao = new LibrarianDAO();
         ldao.verifyUserPassword("ej","elias123");
         ldao.loadLibrarian("ej","elias123");*/
     }
-}

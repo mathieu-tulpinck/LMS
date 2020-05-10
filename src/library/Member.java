@@ -81,11 +81,7 @@ public class Member {
                     break;
             }
         }
-
-
     }
-
-
 }
 
 

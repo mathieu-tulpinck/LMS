@@ -1,23 +1,24 @@
 package db;
 
-import library.Book;
+import library.BookCategory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class BookDAO extends BaseDAO {
+public class BookCategoryDAO extends BaseDAO {
 
-    public void addBook(Book b) {
+    public void addCategory (BookCategory category)
+    {
         try(Connection c = getConn()){
             Statement s = c.createStatement();
-            int result = s.executeUpdate("insert into Book values("+b.getBook_ID() +" ,"+ b.getCat_ID() +" ,'"+b.getAuthor() +"','"+b.getPublisher() +"','"+b.getTitle() +"',"+b.getISBN() +" ,"+b.getYear() +" ,'"+b.getLocation() +"')");
+            int result = s.executeUpdate("insert into Category values("+category.getCategory_ID() +" ,'"+ category.getName() +"')");
             if(result>0)
                 System.out.println("Gelukt!");
             else System.out.println("MISLUKT!");
         } catch (SQLException throwables){
             throwables.printStackTrace();
-            System.out.println("MISLUKT JONGE!");
+            System.out.println("MISLUKT !!!");
         }
     }
 }

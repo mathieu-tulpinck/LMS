@@ -33,7 +33,7 @@ public class ConsoleInterface {
                     break;
 
                 default:
-                    break;f
+                    break;
             }
         }
     }

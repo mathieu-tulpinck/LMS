@@ -57,6 +57,45 @@ public class Library extends BaseDAO {
             return 0;
         }
     }
+
+    public int updateMember(int memberID, String newAddress, int newPhone)  {
+        String query;
+
+        if(!newAddress.isEmpty()) {
+            query = "UPDATE Test "
+                    + "SET Address = ? "
+                    + "WHERE MemberID = ?";
+        } else {
+            query = "UPDATE Test"
+                    + "SET Phone=?"
+                    + "WHERE MemberID = ?";
+        }
+        try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query);) {
+
+            if(!newAddress.isEmpty()) {
+    statement.setString(1, newAddress);
+                statement.setInt(2, memberID);
+                int result = statement.executeUpdate();
+
+                return result;
+            } else {
+                statement.setInt(1, newPhone);
+                statement.setInt(2, memberID);
+                int result = statement.executeUpdate();
+
+                return result;
+            }
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
+
+            return 0;
+        }
+
+
+    }
+
+
 }
 
      /*public Member searchMember(int membershipID) {

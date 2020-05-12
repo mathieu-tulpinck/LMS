@@ -1,24 +1,26 @@
 import java.util.*;
 
 public class Member {
-    private int membershipID;
+    private int memberID;
     private String name;
     private String address;
     private int phone;
 
-    static int currentMembershipID = 0;
 
     public Member(String name, String address, int phone) {
-        currentMembershipID++;
-        this.membershipID = currentMembershipID;
         setName(name);
         setAddress(address);
         setPhone(phone);
     }
 
-    public int getMembershipID(){
-        return this.membershipID;
+    public int getMemberID(){//needs to be modified
+        return this.memberID;
     }
+
+    public void setMemberID(int memberID) {
+        this.memberID = memberID;
+    }
+
 
     public String getName() {
         return name;
@@ -44,11 +46,14 @@ public class Member {
         this.phone = phone;
     }
 
-    public void printInfo() {
-        System.out.println("membershipID = " + membershipID);
-        System.out.println("name = " + name);
-        System.out.println("address = " + address);
-        System.out.println("phone = " + phone);
+    @Override
+    public String toString() {// to be polished
+        return "Member{" +
+                "memberID=" + memberID +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", phone=" + phone +
+                '}';
     }
 
     public void updateBorrowInfo() {

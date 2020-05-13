@@ -5,7 +5,7 @@ public class ConsoleInterface {
     public static void main(String[] args) {
 
 
-        Library lib = new Library();// to be replaced by singleton syntax
+        LibraryDAO lib = new LibraryDAO();// to be replaced by singleton syntax
 
         //authentication module to be added
 
@@ -44,10 +44,12 @@ public class ConsoleInterface {
         return choice;
     }
 
-    public static void addMember(Library lib, Scanner console) {
+    public static void addMember(LibraryDAO lib, Scanner console) {
         Member member = lib.createMember(console);
-        int memberID = lib.addMember(member);
+        Membership membership = lib.createMembership(console);
+        int memberID = lib.addMember(member, membership);
         member.setMemberID(memberID);
+        membership.setMemberID(memberID);
 
         if(memberID > 0) {
             System.out.println("Member created with following details:\n" + member );
@@ -56,7 +58,7 @@ public class ConsoleInterface {
         }
     }
 
-    public static void updateMember(Library lib,  Scanner console) {
+    public static void updateMember(LibraryDAO lib, Scanner console) {
         int newPhone = 0;
         String newAddress = "";
 

@@ -5,17 +5,24 @@ import java.sql.SQLException;
 public class DatabaseSingleton {
 
     private Connection connection;
-    private static DatabaseSingleton instance = null;
+    private static volatile DatabaseSingleton instance = null;
 
     public DatabaseSingleton() {
+        if(instance != null) {
+            throw new RuntimeException("Use getInstance() method to create");
+        }
     }
 
     public static DatabaseSingleton getInstance(){
-        if (instance == null)
-            instance = new DatabaseSingleton();
-        return instance;
-    }
-
+        if (instance == null) {
+            synchronized (DatabaseSingleton.class) {
+                if (instance == null) {
+                    instance = new DatabaseSingleton();
+                }
+            }
+        }
+            return instance;
+        }
     @Override
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();

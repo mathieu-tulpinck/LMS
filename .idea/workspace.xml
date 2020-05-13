@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f0a1168c-93b6-4ffb-92cc-2c79968ff993" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LibraryDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LibraryDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DatabaseSingleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DatabaseSingleton.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +109,7 @@
       <workItem from="1589203891966" duration="11071000" />
       <workItem from="1589268108192" duration="12023000" />
       <workItem from="1589285959610" duration="16326000" />
-      <workItem from="1589349065832" duration="34105000" />
+      <workItem from="1589349065832" duration="34744000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;This is my third commit&quot;">
       <created>1588691076913</created>
@@ -181,7 +181,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589390356678</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="&quot;DDL fixes&quot;">
+      <created>1589397203266</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1589397203266</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -194,7 +201,8 @@
     <MESSAGE value="&quot;Methods addMember and updateMember implemented&quot;" />
     <MESSAGE value="&quot;Link with Membership added&quot;" />
     <MESSAGE value="&quot;method added to add books in batch&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;method added to add books in batch&quot;" />
+    <MESSAGE value="&quot;DDL fixes&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;DDL fixes&quot;" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1019" y="99" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589393789468">
@@ -217,10 +225,10 @@
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state x="666" y="125" key="#mysql-connector-java-8.0.20.jar/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589218880375" />
-    <state x="567" y="87" key="CommitChangelistDialog2" timestamp="1589390356310">
+    <state x="567" y="87" key="CommitChangelistDialog2" timestamp="1589397202722">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state x="567" y="87" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589390356310" />
+    <state x="567" y="87" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589397202722" />
     <state width="1878" height="219" key="GridCell.Tab.0.bottom" timestamp="1589396807849">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
@@ -270,10 +278,10 @@
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state width="500" height="445" key="SwitcherDM/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589371393931" />
-    <state x="560" y="251" key="Vcs.Push.Dialog.v2" timestamp="1589390358984">
+    <state x="560" y="251" key="Vcs.Push.Dialog.v2" timestamp="1589397211508">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589390358984" />
+    <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589397211508" />
     <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.23.1920.977@0.23.1920.977" timestamp="1589204602277" />
     <state width="960" height="488" key="XDebugger.FullValuePopup" timestamp="1589310648892">
       <screen x="0" y="23" width="1920" height="977" />

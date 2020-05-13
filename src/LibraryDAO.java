@@ -56,7 +56,7 @@ public class LibraryDAO extends BaseDAO {
     public int addMember(Member member, Membership membership) {
 
         int primaryKey = 0;
-        String membershipType = membership.getMembershipType().name();
+        String membershipType = membership.getMembershipType().name();// Enum can be inserted in MySQL
         Date startDate = new Date(membership.getStartDate().getTimeInMillis());
         Date endDate = new Date(membership.getEndDate().getTimeInMillis());
 
@@ -65,8 +65,8 @@ public class LibraryDAO extends BaseDAO {
                 "VALUES (?, ?, ?)";
 
         String query2 = "INSERT INTO Membership" +
-                "(Member_ID, MembershipType, Price, StartDate)" +
-                "VALUES (?, ?, ?, ?)";
+                "(Member_ID, MembershipType, Price, StartDate, EndDate)" +
+                "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = getConn();//try-with-resources statement
 
@@ -106,28 +106,29 @@ public class LibraryDAO extends BaseDAO {
 
     public int updateMember(int memberID, String newAddress, int newPhone) {
         String query;
+        int result = 0;
 
         if (!newAddress.isEmpty()) {
-            query = "UPDATE Test "
+            query = "UPDATE Member "
                     + "SET Address = ? "
-                    + "WHERE MemberID = ?";
+                    + "WHERE Member_ID = ?";
         } else {
-            query = "UPDATE Test"
-                    + "SET Phone=?"
-                    + "WHERE MemberID = ?";
+            query = "UPDATE Member "
+                    + "SET Phone = ? "
+                    + "WHERE Member_ID = ?";
         }
         try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query);) {
 
             if (!newAddress.isEmpty()) {
                 statement.setString(1, newAddress);
                 statement.setInt(2, memberID);
-                int result = statement.executeUpdate();
+                result = statement.executeUpdate();
 
                 return result;
             } else {
                 statement.setInt(1, newPhone);
                 statement.setInt(2, memberID);
-                int result = statement.executeUpdate();
+                result = statement.executeUpdate();
 
                 return result;
             }

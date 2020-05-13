@@ -13,14 +13,13 @@ public class Member {
         setPhone(phone);
     }
 
-    public int getMemberID(){//needs to be modified
+    public int getMemberID() {//needs to be modified
         return this.memberID;
     }
 
     public void setMemberID(int memberID) {
         this.memberID = memberID;
     }
-
 
     public String getName() {
         return name;
@@ -56,39 +55,11 @@ public class Member {
                 '}';
     }
 
-    public void updateBorrowInfo() {
-        System.out.println("Which information do you wish to modify: 1. name / 2. address / 3. phone");
+    public boolean issue(Book book) {
 
-        Scanner console = new Scanner(System.in);
-        int choice = console.nextInt();
-
-        while(choice < 0 && choice > 3) {
-            switch (choice) {
-                case 1:
-                    System.out.println("Provide new name: ");
-                    String name = console.next();
-                    setName(name);
-                    System.out.println("Update executed.");
-                    break;
-                case 2:
-                    System.out.println("Provide new address: ");
-                    String address = console.next();
-                    setAddress(address);
-                    System.out.println("Update executed.");
-                    break;
-                case 3:
-                    System.out.println("Provide new phone: ");
-                    int phone = console.nextInt();
-                    setPhone(phone);
-                    System.out.println("Update executed.");
-                    break;
-            }
-        }
-
-
+        return true;
     }
-
-
 }
+
 
 

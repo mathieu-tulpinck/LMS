@@ -137,10 +137,53 @@ public class LibraryDAO extends BaseDAO {
 
             return 0;
         }
-
-
     }
 
+    public Book createBook(Scanner console) {
+
+        String title, author;
+
+        System.out.println("Provide title:");
+        title = console.next();
+        System.out.println("Provide author:");
+        author = console.next();
+
+        Book book = new Book(title, author);
+        return book;
+    }
+
+    public ArrayList<Integer> addBook(ArrayList<Book> bookBatch) {
+        ArrayList<Integer> primaryKeys = new ArrayList<Integer>();
+
+        String query = "INSERT INTO Book" +
+                "(Title, Author)" +
+                "VALUES (?, ?)";
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+
+            for (Book book : bookBatch) {
+
+                statement.setString(1, book.getTitle());
+                statement.setString(2, book.getAuthor());
+
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+
+            try (ResultSet resultSet = statement.getGeneratedKeys();) {
+                while (resultSet.next()) {
+                    primaryKeys.add(resultSet.getInt(1));
+                }
+            }
+            return primaryKeys;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return primaryKeys;
+        }
+    }
 
 }
 

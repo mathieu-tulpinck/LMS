@@ -1,4 +1,6 @@
-package gui;
+/*
+
+package console;
 
 import db.LibrarianDAO;
 
@@ -71,3 +73,4 @@ public class LoginGUI implements ActionListener {
             succes.setText("Foutieve gebruikersnaam of wachtwoord!");
     }
 }
+*/

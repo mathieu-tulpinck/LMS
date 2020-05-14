@@ -10,7 +10,6 @@ public class Book {
     private int year;
     private String location;
 
-
     public Book(int book_ID, int cat_ID, String author, String publisher, String title, int ISBN, int year, String location) {
         this.book_ID = book_ID;
         this.cat_ID = cat_ID;
@@ -20,7 +19,11 @@ public class Book {
         this.ISBN = ISBN;
         this.year = year;
         this.location = location;
+    }
 
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
     }
 
     public int getBook_ID() {
@@ -85,5 +88,10 @@ public class Book {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public boolean issue(Member member){
+
+        return true;
     }
 }

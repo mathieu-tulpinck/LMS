@@ -1,7 +1,9 @@
-import java.util.*;
+package library;
 
+import java.util.*;
+/*
 // class used to coordinate business logic
-/*public class Library {
+public class Library {
     private ArrayList<Library.Member> memberList;
     private ArrayList<db.Library.Book> catalog;
 
@@ -23,11 +25,5 @@ import java.util.*;
         memberList.add(member);
 
     }
-
-
-
-
-
-
 }
 */

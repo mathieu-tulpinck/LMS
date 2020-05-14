@@ -7,7 +7,7 @@ import java.util.Date;
 import library.*;
 
 public class MemberDAO extends BaseDAO {
-    public int getMembershipId (int memberId)
+    /*public int getMembershipId (int memberId)
     {
         try(Connection c = getConn()){
             Statement s = c.createStatement();
@@ -25,7 +25,7 @@ public class MemberDAO extends BaseDAO {
             System.out.println("Problem!");
         }
         return 0;
-    }
+    } */
 
     public Membership getMembership (int memberId)
     {
@@ -78,7 +78,7 @@ public class MemberDAO extends BaseDAO {
 
         try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query);) {
 
-                statement.setInt(1, membershipId);
+                statement.setInt(1, membershipId); //Pass membershipID
                 result = statement.executeUpdate();
 
                 return result;

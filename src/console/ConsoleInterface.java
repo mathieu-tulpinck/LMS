@@ -22,6 +22,7 @@ public class ConsoleInterface {
 
         System.out.println("Acces granted, welcome to the Library Management System!");
 
+        //interface loop
         do {
             System.out.println("Please make a choice between the following options (1 - 9):");
             System.out.println("1. Add member");
@@ -52,7 +53,7 @@ public class ConsoleInterface {
                     break;
 
                 case 8:
-                    userLoggedin = false;
+                    userLoggedin = false; //user log out
                     System.out.println(userNameLibrarian + " succesfully logged out");
                     login(librarianDAO, console);
                     break;
@@ -75,7 +76,7 @@ public class ConsoleInterface {
             System.out.println("Password : ");
             String password = console.next();
 
-            userLoggedin = librarianDAO.verifyUserPassword(userName, password);
+            userLoggedin = librarianDAO.verifyUserPassword(userName, password); //pass username and password to LibrarianDAO
 
             if (userLoggedin) {
                 userNameLibrarian = userName;
@@ -86,9 +87,9 @@ public class ConsoleInterface {
     public static void extendMembership(MemberDAO memberDAO, Scanner console) {
         System.out.println("Memberid : ");
         int memberId = console.nextInt();
-        Membership membership = memberDAO.getMembership(memberId);
+        Membership membership = memberDAO.getMembership(memberId);//Pass MemberID to memberDAO
         memberDAO.extendMembershipYear(membership.getMembershipID());
-        System.out.println("Membership extended for 1 year, member has to pay :" + membership.getPrice()+" Euro");
+        System.out.println("Membership extended for 1 year, member has to pay :" + membership.getPrice()+" Euro"); //Invoicing could be better
     }
 
 

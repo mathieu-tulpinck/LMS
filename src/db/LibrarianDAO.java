@@ -34,7 +34,7 @@ public class LibrarianDAO extends BaseDAO {
                 System.out.println("Wrong username or password");
                 return false;
             } else {
-                //System.out.println("Correcte username en paswoord");
+                //Correcte username en paswoord
                 return true;
             }
         } catch (SQLException throwables) {
@@ -47,7 +47,7 @@ public class LibrarianDAO extends BaseDAO {
 
 
 
-    public void loadLibrarian (String username, String password)
+   /* public void loadLibrarian (String username, String password)
     {
         try(Connection c = getConn()){
             Statement s = c.createStatement();
@@ -66,5 +66,5 @@ public class LibrarianDAO extends BaseDAO {
             throwables.printStackTrace();
             System.out.println("Gebruiker of wachtwoord onjuist!");
         }
-    }
+    } */
 }

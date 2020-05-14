@@ -5,10 +5,26 @@ import java.util.*;
 // class used to coordinate business logic
 public class LibraryDAO extends BaseDAO {
 
-    public final int borrowDuration = 0;// constants regarding working of library. To be initialized.
+    public final int LOAN_DURATION = 30;// constants regarding working of library. To be initialized.
     public final int reservationDuration = 0;
+    private static volatile LibraryDAO instance = null;
 
-    // constructor design to be modified to match singleton pattern
+    public LibraryDAO() {
+        if (instance != null) {
+            throw new RuntimeException("Use getInstance() method to create");
+        }
+    }
+
+    public static LibraryDAO getInstance() {
+        if (instance == null) {
+            synchronized (LibraryDAO.class) {
+                if (instance == null) {
+                    instance = new LibraryDAO();
+                }
+            }
+        }
+        return instance;
+    }
 
     public Member createMember(Scanner console) {
 
@@ -56,7 +72,7 @@ public class LibraryDAO extends BaseDAO {
     public int addMember(Member member, Membership membership) {
 
         int primaryKey = 0;
-        String membershipType = membership.getMembershipType().name();// Enum can be inserted in MySQL
+        MembershipType membershipType = membership.getMembershipType();
         Date startDate = new Date(membership.getStartDate().getTimeInMillis());
         Date endDate = new Date(membership.getEndDate().getTimeInMillis());
 
@@ -87,7 +103,7 @@ public class LibraryDAO extends BaseDAO {
                 }
             }
             statement2.setInt(1, primaryKey);// probably smthg cleaner possible (SQL trigger on insert?)
-            statement2.setString(2, membershipType);
+            statement2.setString(2, membershipType.name());
             statement2.setInt(3, membership.getPrice());// to be changed to double
             statement2.setDate(4, startDate);
             statement2.setDate(5, endDate);
@@ -140,6 +156,37 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    public Member searchMember(int memberID) {
+        Member member = null;
+        String query = "SELECT * " +
+                "FROM Member " +
+                "WHERE Member_ID = ?";
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query);) {
+
+            statement.setInt(1, memberID);
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                while (resultSet.next()) {
+                    int retrievedMemberID = resultSet.getInt("Member_ID");
+                    String name = resultSet.getString("LastName");
+                    String address = resultSet.getString("Address");
+                    int phone = resultSet.getInt("Phone");
+
+                    member = new Member(retrievedMemberID, name, address, phone);
+
+                }
+            }
+            return member;
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
+
+            return member;
+        }
+    }
+
     public Book createBook(Scanner console) {
 
         String title, author;
@@ -185,6 +232,76 @@ public class LibraryDAO extends BaseDAO {
             return primaryKeys;
         }
     }
+
+    public Book searchBook(int bookID) {
+        Book book = null;
+        String query = "SELECT * " +
+                "FROM Book " +
+                "WHERE Book_ID = ?";
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query);) {
+
+            statement.setInt(1, bookID);
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                while (resultSet.next()) {
+                    int retrievedBookID = resultSet.getInt("Book_ID");
+                    String title = resultSet.getString("Title");
+                    String author = resultSet.getString("Author");
+
+                    book = new Book(retrievedBookID, title, author);
+                }
+            }
+            return book;
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
+
+            return book;
+        }
+    }
+
+    public int issueBook(int memberID, ArrayList<Book> bookBatch) {
+        int affectedRecords = 0;
+        Date dueDate = new Date(getDueDate().getTimeInMillis());
+        String query = "INSERT INTO Borrowed_Book " +
+                        "(Book_ID, Member_ID, DueDate) " +
+                        "VALUES(?, ?, ?)";
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+
+            for (Book book : bookBatch) {
+
+                statement.setInt(1, book.getBook_ID());
+                statement.setInt(2, memberID);
+                statement.setDate(3, dueDate);
+
+                statement.addBatch();
+            }
+
+            int[] affectedR = statement.executeBatch();
+
+            for(int num: affectedR) {
+                affectedRecords += num;
+            }
+
+            return affectedRecords;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return affectedRecords;
+        }
+    }
+
+    public GregorianCalendar getDueDate() {
+        GregorianCalendar dueDate = new GregorianCalendar();
+        dueDate.add(GregorianCalendar.DATE, LOAN_DURATION);
+
+        return dueDate;
+    }
+
 
 }
 

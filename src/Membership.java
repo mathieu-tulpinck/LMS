@@ -58,5 +58,17 @@ public class Membership {
     public void setEndDate(GregorianCalendar endDate) {
         this.endDate = endDate;
     }
+
+    @Override
+    public String toString() {
+        return "Membership{" +
+                "DURATION=" + DURATION +
+                ", memberID=" + memberID +
+                ", membershipType=" + membershipType +
+                ", price=" + price +
+                ", startDate=" + startDate.getTime() +
+                ", endDate=" + endDate.getTime() +
+                '}';
+    }
 }
 

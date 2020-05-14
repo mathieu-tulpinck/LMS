@@ -13,6 +13,13 @@ public class Member {
         setPhone(phone);
     }
 
+    public Member(int memberID, String name, String address, int phone) {
+        setMemberID(memberID);
+        setName(name);
+        setAddress(address);
+        setPhone(phone);
+    }
+
     public int getMemberID() {//needs to be modified
         return this.memberID;
     }

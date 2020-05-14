@@ -14,15 +14,13 @@ public class ConsoleInterface {
         LibrarianDAO librarianDAO = new LibrarianDAO();
         MemberDAO memberDAO = new MemberDAO();
 
-        // authentication module to be added
-
         int choice = 0;
         Scanner console = new Scanner(System.in);
 
         //Login module
         login(librarianDAO, console);
 
-        System.out.println("Acces granted, welcome to the LMS!");
+        System.out.println("Acces granted, welcome to the Library Management System!");
 
         do {
             System.out.println("Please make a choice between the following options (1 - 9):");
@@ -55,7 +53,7 @@ public class ConsoleInterface {
 
                 case 8:
                     userLoggedin = false;
-                    System.out.println(userNameLibrarian + " loggedout");
+                    System.out.println(userNameLibrarian + " succesfully logged out");
                     login(librarianDAO, console);
                     break;
 
@@ -71,7 +69,7 @@ public class ConsoleInterface {
 
     public static void login(LibrarianDAO librarianDAO, Scanner console) {
         do {
-            System.out.println("Login");
+            System.out.println("Please enter your username and password");
             System.out.println("Username : ");
             String userName = console.next();
             System.out.println("Password : ");
@@ -82,12 +80,7 @@ public class ConsoleInterface {
             if (userLoggedin) {
                 userNameLibrarian = userName;
             }
-            {
-                System.out.println("Login failed.");
-            }
         } while (!userLoggedin);
-
-        System.out.println("Logged in.");
     }
 
     public static void extendMembership(MemberDAO memberDAO, Scanner console) {
@@ -95,7 +88,7 @@ public class ConsoleInterface {
         int memberId = console.nextInt();
         Membership membership = memberDAO.getMembership(memberId);
         memberDAO.extendMembershipYear(membership.getMembershipID());
-        System.out.println("Te betalen in Euro :" + membership.getPrice());
+        System.out.println("Membership extended for 1 year, member has to pay :" + membership.getPrice()+" Euro");
     }
 
 

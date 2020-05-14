@@ -22,7 +22,7 @@ public class MemberDAO extends BaseDAO {
             }
         } catch (SQLException throwables){
             throwables.printStackTrace();
-            System.out.println("Probleem!");
+            System.out.println("Problem!");
         }
         return 0;
     }
@@ -32,7 +32,7 @@ public class MemberDAO extends BaseDAO {
         try(Connection c = getConn()){
             Statement s = c.createStatement();
             String stringQuery = "SELECT Membership_ID, MembershipType, Price, StartDate, EndDate FROM Membership WHERE Member_ID =  " + memberId;
-            System.out.println(stringQuery);
+            //System.out.println(stringQuery);
             ResultSet rs = s.executeQuery(stringQuery);
             while (rs.next()) {
                 // retrieve and print the values for the current row
@@ -42,11 +42,11 @@ public class MemberDAO extends BaseDAO {
                 Date startDate = rs.getDate("StartDate");
                 Date endDate = rs.getDate("EndDate");
 
-                System.out.println("Membership_ID = " + membershipId );
+                /*System.out.println("Membership_ID = " + membershipId );
                 System.out.println("MembershipType = " + membershipType );
                 System.out.println("Price = " + price );
                 System.out.println("Start date = " + startDate );
-                System.out.println("End Date = " + endDate );
+                System.out.println("End Date = " + endDate );*/
 
                 GregorianCalendar startGregorianCalendar = new GregorianCalendar();
                 startGregorianCalendar.setTime(startDate);
@@ -60,7 +60,7 @@ public class MemberDAO extends BaseDAO {
             }
         } catch (SQLException throwables){
             throwables.printStackTrace();
-            System.out.println("Probleem!");
+            System.out.println("Problem!");
         }
         return null;
     }

@@ -23,7 +23,7 @@ public class LibrarianDAO extends BaseDAO {
         try (Connection c = getConn()) {
             Statement s = c.createStatement();
             String stringQuery = "SELECT count(*) AS rowcount FROM Librarian WHERE username = '" + username + "' AND password = '" + password + "'";
-            System.out.println(stringQuery);
+            //System.out.println(stringQuery);
             ResultSet rs = s.executeQuery(stringQuery);
             int count = 0;
             while (rs.next()) {
@@ -31,15 +31,15 @@ public class LibrarianDAO extends BaseDAO {
                 count = rs.getInt("rowcount");
             }
             if (count == 0) {
-                System.out.println("Foute username of paswoord");
+                System.out.println("Wrong username or password");
                 return false;
             } else {
-                System.out.println("Correcte username en paswoord");
+                //System.out.println("Correcte username en paswoord");
                 return true;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            System.out.println("Gebruiker of wachtwoord onjuist!");
+            System.out.println("Wrong username or password!");
             return false;
         }
     }

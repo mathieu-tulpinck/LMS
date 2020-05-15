@@ -52,7 +52,7 @@ public class LibraryDAO extends BaseDAO {
             statement.setString(3, member.getAddress());
             statement.setInt(4, member.getPhone());
             statement.setDate(5, startDate);
-            statement.setDate(6, endDate);v
+            statement.setDate(6, endDate);
 
             statement.executeUpdate();
 

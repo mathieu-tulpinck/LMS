@@ -1,4 +1,5 @@
-import java.util.GregorianCalendar;
+package library;
+
 import java.util.Scanner;
 
 public class Book {
@@ -52,7 +53,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
+        return "library.Book{" +
                 "bookID=" + bookID +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +

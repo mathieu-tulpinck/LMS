@@ -1,3 +1,5 @@
+package library;
+
 import java.util.*;
 
 public class Member {
@@ -90,7 +92,7 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Member{" +
+        return "library.Member{" +
                 "DURATION=" + DURATION +
                 ", memberID=" + memberID +
                 ", membershipType=" + membershipType.name() +

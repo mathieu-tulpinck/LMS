@@ -1,3 +1,8 @@
+package console;
+
+import db.*;
+import library.*;
+
 import java.util.*;
 
 public class ConsoleInterface {
@@ -67,7 +72,7 @@ public class ConsoleInterface {
         member.setMemberID(memberID);
 
         if (memberID != 0) {
-            System.out.println("Member created with following details:\n" + member);
+            System.out.println("library.Member created with following details:\n" + member);
         } else {
             System.out.println("Process failed.");
         }
@@ -77,7 +82,7 @@ public class ConsoleInterface {
         int newPhone = 0;
         String newAddress = "";
 
-        System.out.println("Provide Member ID:");
+        System.out.println("Provide library.Member ID:");
         int memberID = console.nextInt();
         System.out.println("Provide new address or phone:");
         if (console.hasNextInt()) {
@@ -112,7 +117,7 @@ public class ConsoleInterface {
             for (int i = 0; i < bookBatch.size(); i++) {
                 int bookID = bookIDs.get(i);
                 bookBatch.get(i).setBook_ID(bookID);
-                System.out.println("Book created with following details:\n" + bookBatch.get(i));
+                System.out.println("library.Book created with following details:\n" + bookBatch.get(i));
             }
         } else {
             System.out.println("Process failed");
@@ -126,23 +131,23 @@ public class ConsoleInterface {
         GregorianCalendar dueDate = getDueDate();
         boolean stop = false;
 
-        System.out.println("Provide Member ID: ");
+        System.out.println("Provide library.Member ID: ");
         int memberID = console.nextInt();
 
         borrower = lib.searchMember(memberID);
         if(borrower == null) {
-            System.out.println("Member does not exist");// createMember functionality // check membership validity
+            System.out.println("library.Member does not exist");// createMember functionality // check membership validity
         }
 
         do {
-            System.out.println("Enter Book ID to be lent out: ");
+            System.out.println("Enter library.Book ID to be lent out: ");
             int bookID = console.nextInt();
 
             book = lib.searchBook(bookID);// search on books
             if(book != null) {
                 bookBatch.add(book);
             } else {
-                System.out.println("Book does not exist");
+                System.out.println("library.Book does not exist");
             }
 
             System.out.println("Issue more loans?");

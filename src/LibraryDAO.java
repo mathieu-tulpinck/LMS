@@ -5,7 +5,7 @@ import java.util.*;
 // class used to coordinate business logic
 public class LibraryDAO extends BaseDAO {
 
-    public final int LOAN_DURATION = 30;// constants regarding working of library. To be initialized.
+    // constants regarding working of library. To be initialized.
     public final int reservationDuration = 0;
     private static volatile LibraryDAO instance = null;
 
@@ -26,89 +26,39 @@ public class LibraryDAO extends BaseDAO {
         return instance;
     }
 
-    public Member createMember(Scanner console) {
 
-
-        System.out.println("Provide name");
-        String name = console.next();
-
-        System.out.println("Provide address");
-        String address = console.next();
-
-        System.out.println("Provide phone");
-        int phone = console.nextInt();
-
-        Member member = new Member(name, address, phone);
-
-        return member;
-    }
-
-    public Membership createMembership(Scanner console) {
-
-        int choice;
-        MembershipType m;
-        System.out.println("Provide type of membership:");// user input should be restricted to enums
-        choice = console.nextInt();
-        switch (choice) {
-            case 1:
-                m = MembershipType.JUNIOR;
-                break;
-            case 2:
-                m = MembershipType.STUDENT;
-                break;
-            case 3:
-                m = MembershipType.SENIOR;
-                break;
-            default:
-                m = MembershipType.NORMAL;
-                break;
-        }
-
-        Membership membership = new Membership(m);
-
-        return membership;
-    }
-
-    public int addMember(Member member, Membership membership) {
+    public int addMember(Member member) {
 
         int primaryKey = 0;
-        MembershipType membershipType = membership.getMembershipType();
-        Date startDate = new Date(membership.getStartDate().getTimeInMillis());
-        Date endDate = new Date(membership.getEndDate().getTimeInMillis());
 
-        String query1 = "INSERT INTO Member" +
-                "(LastName, Address, Phone)" +
-                "VALUES (?, ?, ?)";
+        Date startDate = new Date(member.getStartDateMembership().getTimeInMillis());
+        Date endDate = new Date(member.getEndDateMembership().getTimeInMillis());
 
-        String query2 = "INSERT INTO Membership" +
-                "(Member_ID, MembershipType, Price, StartDate, EndDate)" +
-                "VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Member" +
+                        "(MembershipType, LastName, Address, Phone, StartDate, EndDate)" +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
+
 
         try (Connection connection = getConn();//try-with-resources statement
 
 
-             PreparedStatement statement1 = connection.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
-             PreparedStatement statement2 = connection.prepareStatement(query2);) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
 
-            statement1.setString(1, member.getName());
-            statement1.setString(2, member.getAddress());
-            statement1.setInt(3, member.getPhone());
+            statement.setString(1, member.getMembershipType().name());
+            statement.setString(2, member.getLastName());
+            statement.setString(3, member.getAddress());
+            statement.setInt(4, member.getPhone());
+            statement.setDate(5, startDate);
+            statement.setDate(6, endDate);
 
-            statement1.executeUpdate();
+            statement.executeUpdate();
 
-            try (ResultSet resultSet = statement1.getGeneratedKeys();) {
+            try (ResultSet resultSet = statement.getGeneratedKeys();) {
 
                 if (resultSet.next()) {
                     primaryKey = resultSet.getInt(1);
                 }
             }
-            statement2.setInt(1, primaryKey);// probably smthg cleaner possible (SQL trigger on insert?)
-            statement2.setString(2, membershipType.name());
-            statement2.setInt(3, membership.getPrice());// to be changed to double
-            statement2.setDate(4, startDate);
-            statement2.setDate(5, endDate);
-
-            statement2.executeUpdate();
 
             return primaryKey;
 
@@ -187,18 +137,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
-    public Book createBook(Scanner console) {
 
-        String title, author;
-
-        System.out.println("Provide title:");
-        title = console.next();
-        System.out.println("Provide author:");
-        author = console.next();
-
-        Book book = new Book(title, author);
-        return book;
-    }
 
     public ArrayList<Integer> addBook(ArrayList<Book> bookBatch) {
         ArrayList<Integer> primaryKeys = new ArrayList<Integer>();
@@ -233,7 +172,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
-    public Book searchBook(int bookID) {
+    public Book searchBook(int bookID) {// parameters added to search on title or author. Send back multiple instances via ArrayList
         Book book = null;
         String query = "SELECT * " +
                 "FROM Book " +
@@ -262,9 +201,10 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
-    public int issueBook(int memberID, ArrayList<Book> bookBatch) {
+
+    public int issueBook(int memberID, ArrayList<Book> bookBatch, GregorianCalendar parameterDueDate) {
         int affectedRecords = 0;
-        Date dueDate = new Date(getDueDate().getTimeInMillis());
+        Date dueDate = new Date(parameterDueDate.getTimeInMillis());
         String query = "INSERT INTO Borrowed_Book " +
                         "(Book_ID, Member_ID, DueDate) " +
                         "VALUES(?, ?, ?)";
@@ -294,15 +234,6 @@ public class LibraryDAO extends BaseDAO {
             return affectedRecords;
         }
     }
-
-    public GregorianCalendar getDueDate() {
-        GregorianCalendar dueDate = new GregorianCalendar();
-        dueDate.add(GregorianCalendar.DATE, LOAN_DURATION);
-
-        return dueDate;
-    }
-
-
 }
 
      /*public Member searchMember(int membershipID) {

@@ -1,21 +1,29 @@
 import java.util.GregorianCalendar;
+import java.util.Scanner;
 
 public class Book {
 
     private int bookID;
     private String title;
     private String author;
+    private BorrowState borrowState;
+
+
+    public Book() {
+
+    }
 
     public Book(String title, String author) {
-        this.bookID = bookID;
         this.title = title;
         this.author = author;
+        this.borrowState = BorrowState.AVAILABLE;
     }
 
     public Book(int bookID, String title, String author) {
         this.bookID = bookID;
         this.title = title;
         this.author = author;
+        this.borrowState = BorrowState.AVAILABLE;
     }
 
     public int getBook_ID() {
@@ -30,28 +38,41 @@ public class Book {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getAuthor() {
         return author;
     }
 
+    public BorrowState getBorrowState() {
+        return borrowState;
+    }
+
+    public void setBorrowState(BorrowState borrowState) {
+        this.borrowState = borrowState;
+    }
+
     @Override
-    public String toString() {// to be polished.
+    public String toString() {
         return "Book{" +
-                "book_ID=" + bookID +
+                "bookID=" + bookID +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
+                ", borrowState=" + borrowState.name() +
                 '}';
     }
 
-    public boolean issue(Member member) {
+    public Book createBook(Scanner console) {
 
-        return true;
+        String title, author;
+
+        System.out.println("Provide title:");
+        title = console.next();
+        System.out.println("Provide author:");
+        author = console.next();
+
+        Book book = new Book(title, author);
+
+        return book;
     }
-
 }
 
 

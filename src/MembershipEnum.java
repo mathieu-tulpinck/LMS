@@ -1,4 +1,4 @@
-public enum MembershipType {
+public enum MembershipEnum {
     JUNIOR, STUDENT, NORMAL, SENIOR;
 }
 

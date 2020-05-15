@@ -2,8 +2,9 @@ import java.util.*;
 
 public class ConsoleInterface {
 
-    public static void main(String[] args) {
+    public static final int LOAN_DURATION = 30;
 
+    public static void main(String[] args) {
 
         LibraryDAO lib = LibraryDAO.getInstance();
 
@@ -40,6 +41,7 @@ public class ConsoleInterface {
 
                 case 4:
                     issueBook(lib, console);
+                    break;
 
                 default:
                     break;
@@ -54,14 +56,18 @@ public class ConsoleInterface {
     }
 
     public static void addMember(LibraryDAO lib, Scanner console) {
-        Member member = lib.createMember(console);
-        Membership membership = lib.createMembership(console);
-        int memberID = lib.addMember(member, membership);
+        Member emptyMember = new Member();
+        Member member = emptyMember.createMember(console);
+        System.out.println("Can the member benefit from a reduction?");
+        String choice = console.next();
+        if(choice.equals("yes")) {
+            member.chooseMembershipType(console, member);
+        } // else member will keep default normal MembershipType
+        int memberID = lib.addMember(member);
         member.setMemberID(memberID);
-        membership.setMemberID(memberID);
 
         if (memberID != 0) {
-            System.out.println("Member created with following details:\n" + member +'\n' + membership);
+            System.out.println("Member created with following details:\n" + member);
         } else {
             System.out.println("Process failed.");
         }
@@ -84,13 +90,13 @@ public class ConsoleInterface {
     }
 
     public static void addBook(LibraryDAO lib, Scanner console) {
-        Book book;
+        Book book = new Book();
         boolean stop = false;
         ArrayList<Book> bookBatch = new ArrayList<Book>();
         ArrayList<Integer> bookIDs = new ArrayList<Integer>();
         do {
-            book = lib.createBook(console);
-            bookBatch.add(book);
+            book = book.createBook(console);
+            bookBatch.add(book);// only add if book != null
 
             System.out.println("Add more books?");
             String s = console.next();
@@ -113,26 +119,26 @@ public class ConsoleInterface {
         }
     }
 
-    public static void issueBook(LibraryDAO lib, Scanner console){
+    public static void issueBook(LibraryDAO lib, Scanner console){// Limit number of simultaneous book loans
         Member borrower;
-        Book book;
+        Book book = null;
         ArrayList<Book> bookBatch = new ArrayList<>();
+        GregorianCalendar dueDate = getDueDate();
         boolean stop = false;
+
         System.out.println("Provide Member ID: ");
         int memberID = console.nextInt();
 
         borrower = lib.searchMember(memberID);
         if(borrower == null) {
-            System.out.println("Member does not exist");
+            System.out.println("Member does not exist");// createMember functionality // check membership validity
         }
-
-        // add method to verify member exists (searchMemberID(memberID:int):boolean)
 
         do {
             System.out.println("Enter Book ID to be lent out: ");
             int bookID = console.nextInt();
 
-            book = lib.searchBook(bookID);
+            book = lib.searchBook(bookID);// search on books
             if(book != null) {
                 bookBatch.add(book);
             } else {
@@ -147,12 +153,20 @@ public class ConsoleInterface {
             }
         } while (!stop);
 
-        int affectedRecords = lib.issueBook(borrower.getMemberID(), bookBatch);
+        int affectedRecords = lib.issueBook(borrower.getMemberID(), bookBatch, dueDate);
         if(affectedRecords != 0) {
-            System.out.println("Total records of loans inserted in db: " + affectedRecords);
+            System.out.println("Total loan records inserted in db: " + affectedRecords);
+
         } else {
             System.out.println("Process failed");
         }
+    }
+
+    public static GregorianCalendar getDueDate() {
+        GregorianCalendar dueDate = new GregorianCalendar();
+        dueDate.add(GregorianCalendar.DATE, LOAN_DURATION);
+
+        return dueDate;
     }
 }
 

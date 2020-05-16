@@ -8,94 +8,60 @@ import java.util.*;
 // class used to coordinate business logic
 public class LibraryDAO extends BaseDAO {
 
-    public final int borrowDuration = 0;// constants regarding working of library. To be initialized.
+    // constants regarding working of library. To be initialized.
     public final int reservationDuration = 0;
+    private static volatile LibraryDAO instance = null;
 
-    // constructor design to be modified to match singleton pattern
-
-    public Member createMember(Scanner console) {
-
-
-        System.out.println("Provide name");
-        String name = console.next();
-
-        System.out.println("Provide address");
-        String address = console.next();
-
-        System.out.println("Provide phone");
-        int phone = console.nextInt();
-
-        Member member = new Member(name, address, phone);
-
-        return member;
-    }
-
-    public Membership createMembership(Scanner console) {
-
-        int choice;
-        MembershipType m;
-        System.out.println("Provide type of membership:");// user input should be restricted to enums
-        choice = console.nextInt();
-        switch (choice) {
-            case 1:
-                m = MembershipType.JUNIOR;
-                break;
-            case 2:
-                m = MembershipType.STUDENT;
-                break;
-            case 3:
-                m = MembershipType.SENIOR;
-                break;
-            default:
-                m = MembershipType.NORMAL;
-                break;
+    public LibraryDAO() {
+        if (instance != null) {
+            throw new RuntimeException("Use getInstance() method to create");
         }
-
-        Membership membership = new Membership(m);
-
-        return membership;
     }
 
-    public int addMember(Member member, Membership membership) {
+    public static LibraryDAO getInstance() {
+        if (instance == null) {
+            synchronized (LibraryDAO.class) {
+                if (instance == null) {
+                    instance = new LibraryDAO();
+                }
+            }
+        }
+        return instance;
+    }
+
+
+    public int addMember(Member member) {
 
         int primaryKey = 0;
-        String membershipType = membership.getMembershipType().name();// Enum can be inserted in MySQL
-        Date startDate = new Date(membership.getStartDate().getTimeInMillis());
-        Date endDate = new Date(membership.getEndDate().getTimeInMillis());
 
-        String query1 = "INSERT INTO Member" +
-                "(LastName, Address, Phone)" +
-                "VALUES (?, ?, ?)";
+        Date startDate = new Date(member.getStartDateMembership().getTimeInMillis());
+        Date endDate = new Date(member.getEndDateMembership().getTimeInMillis());
 
-        String query2 = "INSERT INTO Membership" +
-                "(Member_ID, MembershipType, Price, StartDate, EndDate)" +
-                "VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Member" +
+                "(MembershipType, LastName, Address, Phone, StartDate, EndDate)" +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
 
         try (Connection connection = getConn();//try-with-resources statement
 
 
-             PreparedStatement statement1 = connection.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
-             PreparedStatement statement2 = connection.prepareStatement(query2);) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
 
-            statement1.setString(1, member.getName());
-            statement1.setString(2, member.getAddress());
-            statement1.setInt(3, member.getPhone());
+            statement.setString(1, member.getMembershipType().name());
+            statement.setString(2, member.getLastName());
+            statement.setString(3, member.getAddress());
+            statement.setInt(4, member.getPhone());
+            statement.setDate(5, startDate);
+            statement.setDate(6, endDate);
 
-            statement1.executeUpdate();
+            statement.executeUpdate();
 
-            try (ResultSet resultSet = statement1.getGeneratedKeys();) {
+            try (ResultSet resultSet = statement.getGeneratedKeys();) {
 
                 if (resultSet.next()) {
                     primaryKey = resultSet.getInt(1);
                 }
             }
-            statement2.setInt(1, primaryKey);// probably smthg cleaner possible (SQL trigger on insert?)
-            statement2.setString(2, membershipType);
-            statement2.setInt(3, membership.getPrice());// to be changed to double
-            statement2.setDate(4, startDate);
-            statement2.setDate(5, endDate);
-
-            statement2.executeUpdate();
 
             return primaryKey;
 
@@ -143,18 +109,38 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
-    public Book createBook(Scanner console) {
+    public Member searchMember(int memberID) {
+        Member member = null;
+        String query = "SELECT * " +
+                "FROM Member " +
+                "WHERE Member_ID = ?";
 
-        String title, author;
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query);) {
 
-        System.out.println("Provide title:");
-        title = console.next();
-        System.out.println("Provide author:");
-        author = console.next();
+            statement.setInt(1, memberID);
 
-        Book book = new Book(title, author);
-        return book;
+            try (ResultSet resultSet = statement.executeQuery();) {
+                while (resultSet.next()) {
+                    int retrievedMemberID = resultSet.getInt("Member_ID");
+                    String name = resultSet.getString("LastName");
+                    String address = resultSet.getString("Address");
+                    int phone = resultSet.getInt("Phone");
+
+                    member = new Member(retrievedMemberID, name, address, phone);
+
+                }
+            }
+            return member;
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
+
+            return member;
+        }
     }
+
+
 
     public ArrayList<Integer> addBook(ArrayList<Book> bookBatch) {
         ArrayList<Integer> primaryKeys = new ArrayList<Integer>();
@@ -189,12 +175,74 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    public Book searchBook(int bookID) {// parameters added to search on title or author. Send back multiple instances via ArrayList
+        Book book = null;
+        String query = "SELECT * " +
+                "FROM Book " +
+                "WHERE Book_ID = ?";
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query);) {
+
+            statement.setInt(1, bookID);
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                while (resultSet.next()) {
+                    int retrievedBookID = resultSet.getInt("Book_ID");
+                    String title = resultSet.getString("Title");
+                    String author = resultSet.getString("Author");
+
+                    book = new Book(retrievedBookID, title, author);
+                }
+            }
+            return book;
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
+
+            return book;
+        }
+    }
+
+
+    public int issueBook(int memberID, ArrayList<Book> bookBatch, GregorianCalendar parameterDueDate) {
+        int affectedRecords = 0;
+        Date dueDate = new Date(parameterDueDate.getTimeInMillis());
+        String query = "INSERT INTO Borrowed_Book " +
+                "(Book_ID, Member_ID, DueDate) " +
+                "VALUES(?, ?, ?)";
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+
+            for (Book book : bookBatch) {
+
+                statement.setInt(1, book.getBook_ID());
+                statement.setInt(2, memberID);
+                statement.setDate(3, dueDate);
+
+                statement.addBatch();
+            }
+
+            int[] affectedR = statement.executeBatch();
+
+            for(int num: affectedR) {
+                affectedRecords += num;
+            }
+
+            return affectedRecords;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return affectedRecords;
+        }
+    }
 }
 
-     /*public Member searchMember(int membershipID) {
+     /*public library.Member searchMember(int membershipID) {
          for (int i = 0; i < memberList.size(); i++) {
              if (memberList.get(i).getMemberID() == membershipID) {
-                 return (Member)(memberList.get(i)); // syntax to be verified
+                 return (library.Member)(memberList.get(i)); // syntax to be verified
              }
          }
          System.out.println("No match.");

@@ -1,3 +1,4 @@
+
 package db;
 
 import java.sql.*;
@@ -7,46 +8,19 @@ import java.util.Date;
 import library.*;
 
 public class MemberDAO extends BaseDAO {
-    /*public int getMembershipId (int memberId)
-    {
-        try(Connection c = getConn()){
-            Statement s = c.createStatement();
-            String stringQuery = "SELECT Membership_ID FROM Member WHERE Member_ID =  " + memberId;
-            System.out.println(stringQuery);
-            ResultSet rs = s.executeQuery(stringQuery);
-            while (rs.next()) {
-                // retrieve and print the values for the current row
-                int i = rs.getInt("Membership_ID");
-                System.out.println("Membership_ID = " + i);
-                return i;
-            }
-        } catch (SQLException throwables){
-            throwables.printStackTrace();
-            System.out.println("Problem!");
-        }
-        return 0;
-    } */
 
-    public Membership getMembership (int memberId)
+    public Member getMember (int memberId)
     {
         try(Connection c = getConn()){
             Statement s = c.createStatement();
-            String stringQuery = "SELECT Membership_ID, MembershipType, Price, StartDate, EndDate FROM Membership WHERE Member_ID =  " + memberId;
-            //System.out.println(stringQuery);
+            String stringQuery = "SELECT Member_ID, MembershipType, StartDate, EndDate FROM Member WHERE Member_ID =  " + memberId;
             ResultSet rs = s.executeQuery(stringQuery);
             while (rs.next()) {
                 // retrieve and print the values for the current row
-                int membershipId = rs.getInt("Membership_ID");
+                int memberId2 = rs.getInt("Member_ID");
                 String membershipType = rs.getString("MembershipType");
-                int price = rs.getInt("Price");
                 Date startDate = rs.getDate("StartDate");
                 Date endDate = rs.getDate("EndDate");
-
-                /*System.out.println("Membership_ID = " + membershipId );
-                System.out.println("MembershipType = " + membershipType );
-                System.out.println("Price = " + price );
-                System.out.println("Start date = " + startDate );
-                System.out.println("End Date = " + endDate );*/
 
                 GregorianCalendar startGregorianCalendar = new GregorianCalendar();
                 startGregorianCalendar.setTime(startDate);
@@ -54,9 +28,11 @@ public class MemberDAO extends BaseDAO {
                 GregorianCalendar endGregorianCalendar = new GregorianCalendar();
                 startGregorianCalendar.setTime(endDate);
 
-                Membership membership = new Membership(membershipId, memberId, MembershipType.NORMAL, price, startGregorianCalendar, endGregorianCalendar );
 
-                return membership;
+
+                Member member = new Member(memberId, membershipType, startGregorianCalendar, endGregorianCalendar );
+
+                return member;
             }
         } catch (SQLException throwables){
             throwables.printStackTrace();
@@ -65,29 +41,30 @@ public class MemberDAO extends BaseDAO {
         return null;
     }
 
-
-
-    public int extendMembershipYear (int membershipId)
+    //Extend End date with 1 year and display price to pay
+    public int extendMembershipYear (int memberId)
     {
         String query;
         int result = 0;
 
-        query = "UPDATE Membership "
+        query = "UPDATE Member "
                 + "SET EndDate = DATE_ADD(EndDate, INTERVAL 1 YEAR) "
-                + "WHERE Membership_ID = ?";
+                + "WHERE Member_ID = ?";
 
         try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query);) {
 
-                statement.setInt(1, membershipId); //Pass membershipID
+                statement.setInt(1, memberId); //Pass memberID
                 result = statement.executeUpdate();
 
                 return result;
 
         } catch (SQLException throwables) {
-            System.out.println("Failure!");
+            System.out.println("Something went wrong, please try again");
             throwables.printStackTrace();
 
             return 0;
         }
     }
+
 }
+

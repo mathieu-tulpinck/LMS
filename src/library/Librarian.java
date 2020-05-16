@@ -2,7 +2,7 @@ package library;
 
 public class Librarian {
 
-    private int employeeID;
+    private int librarianID;
     private String name;
 
     public Librarian(int employeeID, String name, String address, int phone) {
@@ -11,11 +11,11 @@ public class Librarian {
     }
 
     public int getEmployeeID(){
-        return this.employeeID;
+        return this.librarianID;
     }
 
     public void setEmployeeID(int employeeID) {
-        this.employeeID = employeeID;
+        this.librarianID = employeeID;
     }
 
     public String getName() {
@@ -28,7 +28,7 @@ public class Librarian {
 
 
     public void printInfo() {
-        System.out.println("employeeID = " + employeeID);
+        System.out.println("employeeID = " + librarianID);
         System.out.println("name = " + name);
     }
 }

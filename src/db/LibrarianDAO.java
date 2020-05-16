@@ -19,11 +19,10 @@ public class LibrarianDAO extends BaseDAO {
         }
     }*/
 
-
     public boolean verifyUserPassword(String username, String password) {
         try (Connection c = getConn()) {
             Statement s = c.createStatement();
-            String stringQuery = "SELECT count(*) AS rowcount FROM Librarians WHERE username = '" + username + "' AND password = '" + password + "'";
+            String stringQuery = "SELECT count(*) AS rowcount FROM Librarian WHERE username = '" + username + "' AND password = '" + password + "'";
             System.out.println(stringQuery);
             ResultSet rs = s.executeQuery(stringQuery);
             int count = 0;

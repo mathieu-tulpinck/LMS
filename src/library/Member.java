@@ -1,3 +1,5 @@
+package library;
+
 import java.util.*;
 
 public class Member {
@@ -79,11 +81,7 @@ public class Member {
                     break;
             }
         }
-
-
     }
-
-
 }
 
 

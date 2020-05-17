@@ -22,7 +22,7 @@ public class ConsoleInterface {
         Scanner console = new Scanner(System.in);
 
         //Login module, verify username & password
-        //login(librarianDAO, console);
+        login(librarianDAO, console);
 
         System.out.println("Access granted, welcome to the Library Management System!");
 

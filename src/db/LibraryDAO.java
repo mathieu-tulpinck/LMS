@@ -249,6 +249,64 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    public ArrayList<Book> searchBook(String title, String author) {
+        Book book = null;
+        ArrayList<Book> books = new ArrayList<>();
+        String query;
+
+        if(!title.isEmpty()) {
+            query = "SELECT * " +
+            "FROM Book " +
+            "WHERE Title = ?";
+        } else {
+            query = "SELECT * " +
+            "FROM Book " +
+            "WHERE Author = ?";
+
+        }
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            if (!title.isEmpty()) {
+                statement.setString(1, title);
+                try (ResultSet resultSet = statement.executeQuery();) {
+                    while (resultSet.next()) {
+                        int retrievedBookID = resultSet.getInt("Book_ID");
+                        String retrievedTitle = resultSet.getString("Title");
+                        String retrievedAuthor = resultSet.getString("Author");
+                        BookStateEnum bookState = BookStateEnum.valueOf(resultSet.getString("BookState"));
+
+                        book = new Book(retrievedBookID, title, author, bookState);
+                        books.add(book);
+                    }
+                }
+                return books;
+            } else {
+                statement.setString(1, author);
+                try (ResultSet resultSet = statement.executeQuery();) {
+                    while (resultSet.next()) {
+                        int retrievedBookID = resultSet.getInt("Book_ID");
+                        String retrievedTitle = resultSet.getString("Title");
+                        String retrievedAuthor = resultSet.getString("Author");
+                        BookStateEnum bookState = BookStateEnum.valueOf(resultSet.getString("BookState"));
+
+                        book = new Book(retrievedBookID, title, author, bookState);
+                        books.add(book);
+                    }
+                }
+                return books;
+
+            }
+
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
+
+            return books;
+        }
+    }
+
 
     public int issueBook(int memberID, ArrayList<Book> bookBatch, GregorianCalendar parameterDueDate) {
         int affectedRecords = 0;
@@ -300,13 +358,3 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 }
-
-     /*public library.Member searchMember(int membershipID) {
-         for (int i = 0; i < memberList.size(); i++) {
-             if (memberList.get(i).getMemberID() == membershipID) {
-                 return (library.Member)(memberList.get(i)); // syntax to be verified
-             }
-         }
-         System.out.println("No match.");
-         return null;
-     }*/

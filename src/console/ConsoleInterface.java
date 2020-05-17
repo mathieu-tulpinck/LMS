@@ -172,20 +172,32 @@ public class ConsoleInterface {
 
     //case 4
     public static void issueBook(LibraryDAO lib, Scanner console) {// Limit number of simultaneous book loans
-        Member borrower = null;
-        Book book;
-        ArrayList<Book> bookBatch = new ArrayList<>();
-        ArrayList<Member> homonyms = new ArrayList<>();
-        ArrayList<Integer> memberIDs = new ArrayList<Integer>();
-        GregorianCalendar dueDate = getDueDate();
         boolean stop = false;
+        boolean validMembership = false;
+        Member borrower = null;
+        Book book = null;
+        String title = "", author = "";
+        GregorianCalendar currentDate = new GregorianCalendar();
+        GregorianCalendar dueDate = getDueDate();
+
+
+        ArrayList<Book> bookBatch = new ArrayList<>();
+        ArrayList<Book> ambiguousBooks = new ArrayList<>();
+        ArrayList<Member> homonyms = new ArrayList<>();
+
 
         System.out.println("Provide Member ID or name: ");
         if (console.hasNextInt()) {
             int memberID = console.nextInt();
             borrower = lib.searchMember(memberID);
+            if (borrower.getEndDateMembership().compareTo(currentDate) > 0) {// if endDate membership is after currentDate
+                System.out.println("Membership valid.");
+                validMembership = true;
+            } else {
+                System.out.println("Membership expired. Ask member whether membership should be renewed");
+            }
             if (borrower == null) {
-                System.out.println("Member does not exist");// createMember functionality // check membership validity
+                System.out.println("Member does not exist. Ask whether membership should be created");
             }
         } else {
             String name = console.next();
@@ -196,31 +208,98 @@ public class ConsoleInterface {
                 for (Member member : homonyms) {
                     System.out.println(member);
                 }
-                System.out.println("Provide Member ID of correct member");
+                System.out.println("Provide Member ID of correct member:");
                 int choice = console.nextInt();
                 for (Member member : homonyms) {
                     if (choice == member.getMemberID()) {
                         borrower = member;
                     }
                 }
-            } else  {
-                System.out.println("Member does not exist");
+                if (borrower.getEndDateMembership().compareTo(currentDate) > 0) {// if endDate membership is after currentDate
+                    System.out.println("Membership valid.");
+                    validMembership = true;
+                } else {
+                    System.out.println("Membership expired. Ask member whether membership should be renewed");
+                }
+            } else {
+                System.out.println("Member does not exist. Ask whether membership should be created");
             }
         }
 
+        if (validMembership && (borrower != null)) {
             do {
-                System.out.println("Enter Book ID to be lent out: ");
-                int bookID = console.nextInt();
+                System.out.println("Choose search method to find book:\n "
+                        + "1. Searching on BookID\n"
+                        + "2. Searching on Title\n"
+                        + "3. Searching on Author\n");
+                int choice = console.nextInt();
+                switch (choice) {
+                    case 1:
+                        System.out.println("Provide BookID");
+                        int bookID = console.nextInt();
 
-                book = lib.searchBook(bookID);// search on books
-                if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
-                    bookBatch.add(book);
-                } else if (book.getBookState() == BookStateEnum.ISSUED) {
-                    System.out.println("Book already issued");
-                } else {
-                    System.out.println("Book does not exist");
+                        book = lib.searchBook(bookID);// search on books
+                        if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
+                            bookBatch.add(book);
+                        } else if (book.getBookState() == BookStateEnum.ISSUED) {
+                            System.out.println("Book already issued");
+                        } else {
+                            System.out.println("Book does not exist");
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Provide title:");
+                        title = console.next();
+                        ambiguousBooks = lib.searchBook(title, author);
+                        if (ambiguousBooks.size() == 1) {
+                            book = ambiguousBooks.get(0);
+                        } else if (ambiguousBooks.size() > 1) {
+                            for (Book bookInAmbiguousBooks : ambiguousBooks) {
+                                System.out.println(bookInAmbiguousBooks);
+                            }
+                            System.out.println("Provide Book ID of correct book");
+                            int correctBook = console.nextInt();
+                            for (Book bookInAmbiguousBooks : ambiguousBooks) {
+                                if (correctBook == bookInAmbiguousBooks.getBook_ID()) {
+                                    book = bookInAmbiguousBooks;
+                                }
+                            }
+                        }
+                        if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
+                            bookBatch.add(book);
+                        } else if (book.getBookState() == BookStateEnum.ISSUED) {
+                            System.out.println("Book already issued");
+                        } else {
+                            System.out.println("Book does not exist");
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Author:");
+                        author = console.next();
+                        ambiguousBooks = lib.searchBook(title, author);
+                        if (ambiguousBooks.size() == 1) {
+                            book = ambiguousBooks.get(0);
+                        } else if (ambiguousBooks.size() > 1) {
+                            for (Book bookInAmbiguousBooks : ambiguousBooks) {
+                                System.out.println(bookInAmbiguousBooks);
+                            }
+                            System.out.println("Provide Book ID of correct book");
+                            int correctBook = console.nextInt();
+                            for (Book bookInAmbiguousBooks : ambiguousBooks) {
+                                if (correctBook == bookInAmbiguousBooks.getBook_ID()) {
+                                    book = bookInAmbiguousBooks;
+                                }
+                            }
+                        }
+                        if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
+                            bookBatch.add(book);
+                        } else if (book.getBookState() == BookStateEnum.ISSUED) {
+                            System.out.println("Book already issued");
+                        } else {
+                            System.out.println("Book does not exist");
+                        }
+                        break;
                 }
-
                 System.out.println("Issue more loans?");
                 String s = console.next();
 
@@ -239,38 +318,40 @@ public class ConsoleInterface {
                 }
             }
         }
-        //initialize calendar for loans
-        public static GregorianCalendar getDueDate () {
-            GregorianCalendar dueDate = new GregorianCalendar();
-            dueDate.add(GregorianCalendar.DATE, LOAN_DURATION);
-
-            return dueDate;
-        }
-
-        //case 7
-        public static void extendMembership (MemberDAO memberDAO, Scanner console){
-            System.out.println("Provide Member_ID where membership has to be extended with 1 year: ");
-            int memberId = console.nextInt();
-            Member member = memberDAO.getMember(memberId);//Pass MemberID to memberDAO.getMembership
-            memberDAO.extendMembershipYear(memberId);
-            int amount;
-            switch (member.getMembershipType()) {
-                case JUNIOR:
-                    amount = 5;
-                    break;
-                case SENIOR:
-                case STUDENT:
-                    amount = 10;
-                    break;
-                case NORMAL:
-                default:
-                    amount = 15;
-                    break;
-            }
-            System.out.println("Membership extended for 1 year, member has to pay :" + amount + " Euro. Ask for ID or studentID if necessary!"); //Invoicing could be better
-        }
-
-
-        //case 8 restarts the login procedure
-        //case 9 breaks out of the console interface loop and ends the program doing so
     }
+
+    //initialize calendar for loans
+    public static GregorianCalendar getDueDate() {
+        GregorianCalendar dueDate = new GregorianCalendar();
+        dueDate.add(GregorianCalendar.DATE, LOAN_DURATION);
+
+        return dueDate;
+    }
+
+    //case 7
+    public static void extendMembership(MemberDAO memberDAO, Scanner console) {
+        System.out.println("Provide Member_ID where membership has to be extended with 1 year: ");
+        int memberId = console.nextInt();
+        Member member = memberDAO.getMember(memberId);//Pass MemberID to memberDAO.getMembership
+        memberDAO.extendMembershipYear(memberId);
+        int amount;
+        switch (member.getMembershipType()) {
+            case JUNIOR:
+                amount = 5;
+                break;
+            case SENIOR:
+            case STUDENT:
+                amount = 10;
+                break;
+            case NORMAL:
+            default:
+                amount = 15;
+                break;
+        }
+        System.out.println("Membership extended for 1 year, member has to pay :" + amount + " Euro. Ask for ID or studentID if necessary!"); //Invoicing could be better
+    }
+
+
+    //case 8 restarts the login procedure
+    //case 9 breaks out of the console interface loop and ends the program doing so
+}

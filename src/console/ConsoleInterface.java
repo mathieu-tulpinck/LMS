@@ -1,9 +1,7 @@
 package console;
-import csvimport.CSVLoader;
 import db.*;
 import library.*;
 
-import java.sql.Connection;
 import java.util.*;
 
 public class ConsoleInterface {
@@ -223,14 +221,12 @@ public class ConsoleInterface {
     public static void loadCSVBooks(LibraryDAO lib, Scanner console) {
         try {
 
-            System.out.println("Enter the csv file and its location: ");
-            String CSVLoc = console.nextLine();
+            System.out.println("Enter the csv file (no spaces) and its location: (e.g. C:\\Users\\olivier.thas\\Downloads\\Loadsample1.csv)");
+            System.out.println("Consider a csv format with header columns Title, Author and BookState");
+            String csvLocation = console.next();
+            lib.addBookcsv(csvLocation);
 
-            lib.addBookcsv();
-
-            //CSVLoader loader = new CSVLoader(getConn());
-
-            //loader.loadCSV("C:\\Users\\olivier.thas\\OneDrive - Dimension Data\\Documents\\Load sample1.csv", "1920MOBAPPGR2.Book");
+//            lib.addBookcsv();
 
         } catch (Exception e) {
             e.printStackTrace();

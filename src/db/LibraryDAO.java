@@ -176,12 +176,23 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    public void addBookcsv(String csvLoc) {
+        try {
+
+            CSVLoader loader = new CSVLoader(getConn());
+
+            loader.loadCSV(csvLoc, "Book");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addBookcsv() {
         try {
 
             CSVLoader loader = new CSVLoader(getConn());
 
-//            loader.loadCSV("C:\\Users\\olivier.thas\\OneDrive - Dimension Data\\Documents\\Load sample1.csv", "1920PROGESS096.Book");
             loader.loadCSV("C:\\Users\\olivier.thas\\OneDrive - Dimension Data\\Documents\\Load sample1.csv", "Book");
 
         } catch (Exception e) {

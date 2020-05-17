@@ -34,11 +34,11 @@ public class ConsoleInterface {
             System.out.println("3. Add books");
             System.out.println("4. Issue books");
 
-            System.out.println("5. Show books");
-            System.out.println("6. Add librarian");
-            System.out.println("7. Extend Membership");
-            System.out.println("8. Logout");
-            System.out.println("9. Exit");
+            System.out.println("8. Show books");
+            System.out.println("9. Add librarian");
+            System.out.println("10. Extend Membership");
+            System.out.println("11. Logout");
+            System.out.println("12. Exit");
 
             choice = takeInput(console);
 
@@ -59,32 +59,32 @@ public class ConsoleInterface {
                     issueBook(lib, console);
                     break;
 
-                case 5:
+                case 8:
                     showBooks(lib);
                     break;
 
-                case 6:
+                case 9:
                     addLibrarian(librarianDAO, console);
                     break;
 
-                case 7:
+                case 10:
                     extendMembership(memberDAO, console);
                     break;
 
-                case 8:
+                case 11:
                     userLoggedin = false; //user gets logged out
                     System.out.println(userNameLibrarian + " succesfully logged out");
                     login(librarianDAO, console);
                     break;
 
-                case 9:
+                case 12:
                     System.out.println("LMS shutting down...");
                     break;
 
                 default:
                     break;
             }
-        } while (choice != 9);
+        } while (choice != 12);
     }
 
     //login method

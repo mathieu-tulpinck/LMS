@@ -1,6 +1,7 @@
 package console;
 import db.*;
 import library.*;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ public class ConsoleInterface {
         Scanner console = new Scanner(System.in);
 
         //Login module, verify username & password
-        login(librarianDAO, console);
+        //login(librarianDAO, console);
 
         System.out.println("Access granted, welcome to the Library Management System!");
 
@@ -33,6 +34,8 @@ public class ConsoleInterface {
             System.out.println("3. Add books");
             System.out.println("4. Issue books");
 
+            System.out.println("5. Show books");
+            System.out.println("6. Add librarian");
             System.out.println("7. Extend Membership");
             System.out.println("8. Logout");
             System.out.println("9. Exit");
@@ -54,6 +57,14 @@ public class ConsoleInterface {
 
                 case 4:
                     issueBook(lib, console);
+                    break;
+
+                case 5:
+                    showBooks(lib);
+                    break;
+
+                case 6:
+                    addLibrarian(librarianDAO, console);
                     break;
 
                 case 7:
@@ -90,6 +101,8 @@ public class ConsoleInterface {
 
             if (userLoggedin) {
                 userNameLibrarian = userName;
+            } else {
+                System.out.println("Login failed, try again with correct username & password");
             }
         } while (!userLoggedin);
     }
@@ -105,7 +118,7 @@ public class ConsoleInterface {
     public static void addMember(LibraryDAO lib, Scanner console) {
         Member emptyMember = new Member();
         Member member = emptyMember.createMember(console);
-        System.out.println("Can the member benefit from a reduction?");
+        System.out.println("Can the member benefit from a reduction? yes / no");
         String choice = console.next();
         if(choice.equals("yes")) {
             member.chooseMembershipType(console, member);
@@ -176,26 +189,26 @@ public class ConsoleInterface {
         GregorianCalendar dueDate = getDueDate();
         boolean stop = false;
 
-        System.out.println("Provide library.Member ID: ");
+        System.out.println("Provide Member ID: ");
         int memberID = console.nextInt();
 
         borrower = lib.searchMember(memberID);
         if(borrower == null) {
-            System.out.println("library.Member does not exist");// createMember functionality // check membership validity
+            System.out.println("Member does not exist");// createMember functionality // check membership validity
         }
 
         do {
-            System.out.println("Enter library.Book ID to be lent out: ");
+            System.out.println("Enter Book ID to be lent out: ");
             int bookID = console.nextInt();
 
             book = lib.searchBook(bookID);// search on books
             if(book != null) {
                 bookBatch.add(book);
             } else {
-                System.out.println("library.Book does not exist");
+                System.out.println("Book does not exist");
             }
 
-            System.out.println("Issue more loans?");
+            System.out.println("Issue more loans? yes / no");
             String s = console.next();
 
             if (s.equals("no")) {
@@ -205,7 +218,7 @@ public class ConsoleInterface {
 
         int affectedRecords = lib.issueBook(borrower.getMemberID(), bookBatch, dueDate);
         if(affectedRecords != 0) {
-            System.out.println("Total loan records inserted in db: " + affectedRecords);
+            System.out.println("Total loan records inserted in database: " + affectedRecords);
 
         } else {
             System.out.println("Process failed");
@@ -218,6 +231,24 @@ public class ConsoleInterface {
         dueDate.add(GregorianCalendar.DATE, LOAN_DURATION);
 
         return dueDate;
+    }
+
+    //case5
+    public static void showBooks(LibraryDAO lib){
+        lib.showBooks();
+    }
+
+    //case 6
+    public static void addLibrarian(LibrarianDAO lib, Scanner console) {
+        Librarian librarian = Librarian.createLibrarian(console);
+        int librarianID = lib.addLibrarian(librarian);
+        librarian.setLibrarianID(librarianID);
+
+        if (librarianID != 0) {
+            System.out.println("Librarian created with following details:\n" + librarian);
+        } else {
+            System.out.println("Librarian not created, please try again");
+        }
     }
 
     //case 7

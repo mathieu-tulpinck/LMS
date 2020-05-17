@@ -31,6 +31,17 @@ public class Member {
         endDateMembership.add(GregorianCalendar.YEAR, DURATION);
     }
 
+    public Member(String firstname, String lastname, String address, int phone) {
+        this.membershipType = MembershipEnum.NORMAL;
+        setFirstName(firstname);
+        setLastName(lastname);
+        setAddress(address);
+        setPhone(phone);
+        startDateMembership = new GregorianCalendar();
+        endDateMembership = new GregorianCalendar();
+        endDateMembership.add(GregorianCalendar.YEAR, DURATION);
+    }
+
     public Member(int memberID, String mb, GregorianCalendar startDateMembership, GregorianCalendar endDateMembership) {
         this.memberID = memberID;
         this.startDateMembership = startDateMembership;
@@ -113,6 +124,14 @@ public class Member {
         return endDateMembership;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     @Override
     public String toString() {
         return "library.Member{" +
@@ -131,9 +150,11 @@ public class Member {
 
     public Member createMember(Scanner console) {
 
+        System.out.println("Provide first name");
+        String firstname = console.next();
 
         System.out.println("Provide last name");
-        String name = console.next();
+        String lastname = console.next();
 
         System.out.println("Provide address");
         String address = console.next();
@@ -141,7 +162,7 @@ public class Member {
         System.out.println("Provide phone");
         int phone = console.nextInt();
 
-        Member member = new Member(name, address, phone);
+        Member member = new Member(firstname, lastname, address, phone);
 
         return member;
     }
@@ -149,7 +170,7 @@ public class Member {
     public void chooseMembershipType(Scanner console, Member member) {
 
         int choice;
-        System.out.println("Provide type of membership:");// user input should be restricted to enums
+        System.out.println("Provide type of membership: 1 = junior, 2 = student, 3 = senior1");// user input should be restricted to enums
         choice = console.nextInt();
         switch (choice) {
             case 1:

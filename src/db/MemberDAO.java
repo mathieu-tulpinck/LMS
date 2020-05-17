@@ -53,10 +53,10 @@ public class MemberDAO extends BaseDAO {
 
         try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query);) {
 
-                statement.setInt(1, memberId); //Pass memberID
-                result = statement.executeUpdate();
+            statement.setInt(1, memberId); //Pass memberID
+            result = statement.executeUpdate();
 
-                return result;
+            return result;
 
         } catch (SQLException throwables) {
             System.out.println("Something went wrong, please try again");

@@ -39,8 +39,9 @@ public class LibraryDAO extends BaseDAO {
         Date endDate = new Date(member.getEndDateMembership().getTimeInMillis());
 
         String query = "INSERT INTO Member" +
-                "(MembershipType, LastName, Address, Phone, StartDate, EndDate)" +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "(MembershipType, LastName, FirstName, Address, Phone, StartDate, EndDate)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
 
 
         try (Connection connection = getConn();//try-with-resources statement
@@ -50,10 +51,11 @@ public class LibraryDAO extends BaseDAO {
 
             statement.setString(1, member.getMembershipType().name());
             statement.setString(2, member.getLastName());
-            statement.setString(3, member.getAddress());
-            statement.setInt(4, member.getPhone());
-            statement.setDate(5, startDate);
-            statement.setDate(6, endDate);
+            statement.setString(3, member.getFirstName());
+            statement.setString(4, member.getAddress());
+            statement.setInt(5, member.getPhone());
+            statement.setDate(6, startDate);
+            statement.setDate(7, endDate);
 
             statement.executeUpdate();
 
@@ -141,7 +143,30 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    public void showBooks(){
+        try(Connection c = getConn()){
+            Statement s = c.createStatement();
+            String stringQuery = "SELECT Book_ID, Title, Author, BookState FROM Book";
+            ResultSet rs = s.executeQuery(stringQuery);
+            while (rs.next()) {
+                // retrieve and print the values for the current row
+                int book_ID = rs.getInt("Book_ID");
+                String title = rs.getString("Title");
+                String author = rs.getString("Author");
+                String BookState = rs.getString("BookState");
 
+                System.out.println("BookID: " + book_ID);
+                System.out.println("Title: " + title);
+                System.out.println("Author: " + author);
+                System.out.println("Book state: " + BookState);
+                System.out.println("--------------------------");
+
+            }
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+            System.out.println("Problem!");
+        }
+    }
 
     public ArrayList<Integer> addBook(ArrayList<Book> bookBatch) {
         ArrayList<Integer> primaryKeys = new ArrayList<Integer>();
@@ -228,7 +253,6 @@ public class LibraryDAO extends BaseDAO {
             return book;
         }
     }
-
 
     public int issueBook(int memberID, ArrayList<Book> bookBatch, GregorianCalendar parameterDueDate) {
         int affectedRecords = 0;

@@ -1,4 +1,5 @@
 package db;
+import csvimport.CSVLoader;
 import library.*;
 
 import java.sql.*;
@@ -172,6 +173,19 @@ public class LibraryDAO extends BaseDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return primaryKeys;
+        }
+    }
+
+    public void addBookcsv() {
+        try {
+
+            CSVLoader loader = new CSVLoader(getConn());
+
+//            loader.loadCSV("C:\\Users\\olivier.thas\\OneDrive - Dimension Data\\Documents\\Load sample1.csv", "1920PROGESS096.Book");
+            loader.loadCSV("C:\\Users\\olivier.thas\\OneDrive - Dimension Data\\Documents\\Load sample1.csv", "Book");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,7 +1,9 @@
 package console;
+import csvimport.CSVLoader;
 import db.*;
 import library.*;
 
+import java.sql.Connection;
 import java.util.*;
 
 public class ConsoleInterface {
@@ -32,6 +34,7 @@ public class ConsoleInterface {
             System.out.println("2. Modify details of a member");
             System.out.println("3. Add books");
             System.out.println("4. Issue books");
+            System.out.println("5. Mass upload of books (csv-file)");
 
             System.out.println("7. Extend Membership");
             System.out.println("8. Logout");
@@ -54,6 +57,10 @@ public class ConsoleInterface {
 
                 case 4:
                     issueBook(lib, console);
+                    break;
+
+                case 5:
+                    loadCSVBooks(lib, console);
                     break;
 
                 case 7:
@@ -209,6 +216,24 @@ public class ConsoleInterface {
 
         } else {
             System.out.println("Process failed");
+        }
+    }
+
+    //case 5
+    public static void loadCSVBooks(LibraryDAO lib, Scanner console) {
+        try {
+
+            System.out.println("Enter the csv file and its location: ");
+            String CSVLoc = console.nextLine();
+
+            lib.addBookcsv();
+
+            //CSVLoader loader = new CSVLoader(getConn());
+
+            //loader.loadCSV("C:\\Users\\olivier.thas\\OneDrive - Dimension Data\\Documents\\Load sample1.csv", "1920MOBAPPGR2.Book");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

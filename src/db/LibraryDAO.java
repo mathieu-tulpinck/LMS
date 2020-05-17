@@ -45,7 +45,7 @@ public class LibraryDAO extends BaseDAO {
         try (Connection connection = getConn();//try-with-resources statement
 
 
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
 
             statement.setString(1, member.getMembershipType().name());
             statement.setString(2, member.getLastName());
@@ -86,7 +86,7 @@ public class LibraryDAO extends BaseDAO {
                     + "SET Phone = ? "
                     + "WHERE Member_ID = ?";
         }
-        try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query);) {
+        try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query)) {
 
             if (!newAddress.isEmpty()) {
                 statement.setString(1, newAddress);
@@ -120,15 +120,21 @@ public class LibraryDAO extends BaseDAO {
 
             statement.setInt(1, memberID);
 
-            try (ResultSet resultSet = statement.executeQuery();) {
+            try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     int retrievedMemberID = resultSet.getInt("Member_ID");
+                    MembershipEnum membershipType = MembershipEnum.valueOf(resultSet.getString("MembershipType"));
                     String name = resultSet.getString("LastName");
                     String address = resultSet.getString("Address");
                     int phone = resultSet.getInt("Phone");
+                    Date retrievedStartDate = resultSet.getDate("StartDate");
+                    Date retrievedEndDate = resultSet.getDate("EndDate");
+                    GregorianCalendar startDate = new GregorianCalendar();
+                    startDate.setTime(retrievedStartDate);
+                    GregorianCalendar endDate = new GregorianCalendar();
+                    endDate.setTime(retrievedEndDate);
 
-                    member = new Member(retrievedMemberID, name, address, phone);
-
+                    member = new Member(retrievedMemberID, membershipType, name, address, phone, startDate, endDate);
                 }
             }
             return member;
@@ -137,6 +143,44 @@ public class LibraryDAO extends BaseDAO {
             throwables.printStackTrace();
 
             return member;
+        }
+    }
+
+    public ArrayList<Member> searchMember(String name) {
+        ArrayList<Member> members = new ArrayList<Member>();
+        String query = "SELECT * " +
+                        "FROM Member " +
+                        "WHERE LastName = ?";
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query);) {
+
+            statement.setString(1, name);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int memberID = resultSet.getInt("Member_ID");
+                    MembershipEnum membershipType = MembershipEnum.valueOf(resultSet.getString("MembershipType"));
+                    String retrievedName = resultSet.getString("LastName");
+                    String address = resultSet.getString("Address");
+                    int phone = resultSet.getInt("Phone");
+                    Date retrievedStartDate = resultSet.getDate("StartDate");
+                    Date retrievedEndDate = resultSet.getDate("EndDate");
+                    GregorianCalendar startDate = new GregorianCalendar();
+                    startDate.setTime(retrievedStartDate);
+                    GregorianCalendar endDate = new GregorianCalendar();
+                    endDate.setTime(retrievedEndDate);
+
+                    Member member = new Member(memberID, membershipType, retrievedName, address, phone, startDate, endDate);
+                    members.add(member);
+                }
+            }
+            return members;
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
+
+            return members;
         }
     }
 
@@ -150,7 +194,7 @@ public class LibraryDAO extends BaseDAO {
                 "VALUES (?, ?)";
 
         try (Connection connection = getConn();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             for (Book book : bookBatch) {
 
@@ -162,7 +206,7 @@ public class LibraryDAO extends BaseDAO {
 
             statement.executeBatch();
 
-            try (ResultSet resultSet = statement.getGeneratedKeys();) {
+            try (ResultSet resultSet = statement.getGeneratedKeys()) {
                 while (resultSet.next()) {
                     primaryKeys.add(resultSet.getInt(1));
                 }
@@ -182,7 +226,7 @@ public class LibraryDAO extends BaseDAO {
                 "WHERE Book_ID = ?";
 
         try (Connection connection = getConn();
-             PreparedStatement statement = connection.prepareStatement(query);) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, bookID);
 
@@ -191,8 +235,9 @@ public class LibraryDAO extends BaseDAO {
                     int retrievedBookID = resultSet.getInt("Book_ID");
                     String title = resultSet.getString("Title");
                     String author = resultSet.getString("Author");
+                    BookStateEnum bookState = BookStateEnum.valueOf(resultSet.getString("BookState"));
 
-                    book = new Book(retrievedBookID, title, author);
+                    book = new Book(retrievedBookID, title, author, bookState);
                 }
             }
             return book;
@@ -208,27 +253,44 @@ public class LibraryDAO extends BaseDAO {
     public int issueBook(int memberID, ArrayList<Book> bookBatch, GregorianCalendar parameterDueDate) {
         int affectedRecords = 0;
         Date dueDate = new Date(parameterDueDate.getTimeInMillis());
-        String query = "INSERT INTO Borrowed_Book " +
-                "(Book_ID, Member_ID, DueDate) " +
-                "VALUES(?, ?, ?)";
+        BookStateEnum bookState = BookStateEnum.ISSUED;
+
+        String query1 = "INSERT INTO Borrowed_Book "
+                        + "(Book_ID, Member_ID, DueDate) "
+                        + "VALUES(?, ?, ?)";
+
+        String query2 = "UPDATE Book "
+                        + "SET BookState = ? "
+                        + "WHERE Book_ID = ?";
 
         try (Connection connection = getConn();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement statement1 = connection.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement statement2 = connection.prepareStatement(query2)) {
 
             for (Book book : bookBatch) {
 
-                statement.setInt(1, book.getBook_ID());
-                statement.setInt(2, memberID);
-                statement.setDate(3, dueDate);
+                statement1.setInt(1, book.getBook_ID());
+                statement1.setInt(2, memberID);
+                statement1.setDate(3, dueDate);
 
-                statement.addBatch();
+                statement1.addBatch();
             }
 
-            int[] affectedR = statement.executeBatch();
+            int[] affectedR = statement1.executeBatch();
 
             for(int num: affectedR) {
                 affectedRecords += num;
             }
+
+
+            for (Book book: bookBatch) {
+                statement2.setString(1, bookState.name());
+                statement2.setInt(2, book.getBook_ID());
+
+                statement2.addBatch();
+            }
+
+            statement2.executeBatch();
 
             return affectedRecords;
 

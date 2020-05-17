@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="991e12a7-8514-409f-bd6b-4d2d033a54bb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/LMS2.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="991e12a7-8514-409f-bd6b-4d2d033a54bb" name="Default Changelist" comment="&quot;clean base&quot;">
+      <change afterPath="$PROJECT_DIR$/mysql-connector-java-8.0.15.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console/ConsoleInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/console/ConsoleInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/DatabaseSingleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/DatabaseSingleton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/LibraryDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/LibraryDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/library/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/library/BorrowState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/BookStateEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/library/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Member.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,46 +67,75 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1589633688808</updated>
-      <workItem from="1589633690379" duration="1161000" />
+      <workItem from="1589633690379" duration="1837000" />
+      <workItem from="1589710284441" duration="10120000" />
     </task>
+    <task id="LOCAL-00001" summary="&quot;test&quot;">
+      <created>1589635040662</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1589635040662</updated>
+    </task>
+    <task id="LOCAL-00002" summary="&quot;clean base&quot;">
+      <created>1589635096541</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1589635096541</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="&quot;test&quot;" />
+    <MESSAGE value="&quot;clean base&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;clean base&quot;" />
   </component>
   <component name="WindowStateProjectService">
     <state x="560" y="177" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589633884952">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state x="560" y="177" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589633884952" />
-    <state x="500" y="114" key="CommitChangelistDialog2" timestamp="1589633911184">
+    <state x="398" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1589718953097">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state x="500" y="114" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589633911184" />
-    <state width="1878" height="264" key="GridCell.Tab.0.bottom" timestamp="1589634256333">
+    <state x="398" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589718953097" />
+    <state x="500" y="114" key="CommitChangelistDialog2" timestamp="1589655339232">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state width="1878" height="264" key="GridCell.Tab.0.bottom/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589634256333" />
-    <state width="1878" height="264" key="GridCell.Tab.0.center" timestamp="1589634256331">
+    <state x="500" y="114" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589655339232" />
+    <state width="1878" height="124" key="GridCell.Tab.0.bottom" timestamp="1589722656182">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state width="1878" height="264" key="GridCell.Tab.0.center/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589634256331" />
-    <state width="1878" height="264" key="GridCell.Tab.0.left" timestamp="1589634256330">
+    <state width="1878" height="124" key="GridCell.Tab.0.bottom/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589722656182" />
+    <state width="1878" height="124" key="GridCell.Tab.0.center" timestamp="1589722656179">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state width="1878" height="264" key="GridCell.Tab.0.left/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589634256330" />
-    <state width="1878" height="264" key="GridCell.Tab.0.right" timestamp="1589634256332">
+    <state width="1878" height="124" key="GridCell.Tab.0.center/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589722656179" />
+    <state width="1878" height="124" key="GridCell.Tab.0.left" timestamp="1589722656178">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state width="1878" height="264" key="GridCell.Tab.0.right/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589634256332" />
+    <state width="1878" height="124" key="GridCell.Tab.0.left/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589722656178" />
+    <state width="1878" height="124" key="GridCell.Tab.0.right" timestamp="1589722656180">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state width="1878" height="124" key="GridCell.Tab.0.right/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589722656180" />
     <state x="448" y="93" key="SettingsEditor" timestamp="1589634242930">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state x="448" y="93" key="SettingsEditor/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589634242930" />
-    <state x="560" y="251" key="Vcs.Push.Dialog.v2" timestamp="1589634900768">
+    <state x="560" y="251" key="Vcs.Push.Dialog.v2" timestamp="1589635099378">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
-    <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589634900768" />
+    <state x="560" y="251" key="Vcs.Push.Dialog.v2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589635099378" />
     <state x="1205" y="231" key="git4idea.branch.GitSmartOperationDialog" timestamp="1589634484766">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state x="1205" y="231" key="git4idea.branch.GitSmartOperationDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589634484766" />
+    <state x="666" y="307" key="git4idea.merge.GitPullDialog" timestamp="1589714422897">
+      <screen x="0" y="23" width="1920" height="977" />
+    </state>
+    <state x="666" y="307" key="git4idea.merge.GitPullDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589714422897" />
   </component>
 </project>

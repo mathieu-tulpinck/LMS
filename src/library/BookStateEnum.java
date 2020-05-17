@@ -1,5 +1,5 @@
 package library;
 
-public enum BorrowState {
+public enum BookStateEnum {
     AVAILABLE, ISSUED;
 }

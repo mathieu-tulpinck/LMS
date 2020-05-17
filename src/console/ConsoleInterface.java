@@ -1,4 +1,5 @@
 package console;
+
 import db.*;
 import library.*;
 
@@ -21,7 +22,7 @@ public class ConsoleInterface {
         Scanner console = new Scanner(System.in);
 
         //Login module, verify username & password
-        login(librarianDAO, console);
+        //login(librarianDAO, console); Commented out for testing
 
         System.out.println("Access granted, welcome to the Library Management System!");
 
@@ -78,20 +79,21 @@ public class ConsoleInterface {
 
     //login method
     public static void login(LibrarianDAO librarianDAO, Scanner console) {
+        String userName, password;
+
         do {
             System.out.println("Please enter your username and password");
             System.out.println("Username : ");
-            String userName = console.next();
+            userName = console.next();
             System.out.println("Password : ");
-            String password = console.next();
+            password = console.next();
 
             //pass username and password to LibrarianDAO
-            userLoggedin = librarianDAO.verifyUserPassword(userName, password);
 
-            if (userLoggedin) {
+            if (librarianDAO.verifyUserPassword(userName, password)) {
                 userNameLibrarian = userName;
             }
-        } while (!userLoggedin);
+        } while (!librarianDAO.verifyUserPassword(userName, password));
     }
 
     //take input method
@@ -107,14 +109,14 @@ public class ConsoleInterface {
         Member member = emptyMember.createMember(console);
         System.out.println("Can the member benefit from a reduction?");
         String choice = console.next();
-        if(choice.equals("yes")) {
+        if (choice.equals("yes")) {
             member.chooseMembershipType(console, member);
         } // else member will keep default normal MembershipType
         int memberID = lib.addMember(member);
         member.setMemberID(memberID);
 
         if (memberID != 0) {
-            System.out.println("library.Member created with following details:\n" + member);
+            System.out.println("Member created with following details:\n" + member);
         } else {
             System.out.println("Process failed.");
         }
@@ -161,7 +163,7 @@ public class ConsoleInterface {
             for (int i = 0; i < bookBatch.size(); i++) {
                 int bookID = bookIDs.get(i);
                 bookBatch.get(i).setBook_ID(bookID);
-                System.out.println("library.Book created with following details:\n" + bookBatch.get(i));
+                System.out.println("Book created with following details:\n" + bookBatch.get(i));
             }
         } else {
             System.out.println("Process failed");
@@ -169,81 +171,106 @@ public class ConsoleInterface {
     }
 
     //case 4
-    public static void issueBook(LibraryDAO lib, Scanner console){// Limit number of simultaneous book loans
-        Member borrower;
-        Book book = null;
+    public static void issueBook(LibraryDAO lib, Scanner console) {// Limit number of simultaneous book loans
+        Member borrower = null;
+        Book book;
         ArrayList<Book> bookBatch = new ArrayList<>();
+        ArrayList<Member> homonyms = new ArrayList<>();
+        ArrayList<Integer> memberIDs = new ArrayList<Integer>();
         GregorianCalendar dueDate = getDueDate();
         boolean stop = false;
 
-        System.out.println("Provide library.Member ID: ");
-        int memberID = console.nextInt();
-
-        borrower = lib.searchMember(memberID);
-        if(borrower == null) {
-            System.out.println("library.Member does not exist");// createMember functionality // check membership validity
-        }
-
-        do {
-            System.out.println("Enter library.Book ID to be lent out: ");
-            int bookID = console.nextInt();
-
-            book = lib.searchBook(bookID);// search on books
-            if(book != null) {
-                bookBatch.add(book);
-            } else {
-                System.out.println("library.Book does not exist");
+        System.out.println("Provide Member ID or name: ");
+        if (console.hasNextInt()) {
+            int memberID = console.nextInt();
+            borrower = lib.searchMember(memberID);
+            if (borrower == null) {
+                System.out.println("Member does not exist");// createMember functionality // check membership validity
             }
-
-            System.out.println("Issue more loans?");
-            String s = console.next();
-
-            if (s.equals("no")) {
-                stop = true;
-            }
-        } while (!stop);
-
-        int affectedRecords = lib.issueBook(borrower.getMemberID(), bookBatch, dueDate);
-        if(affectedRecords != 0) {
-            System.out.println("Total loan records inserted in db: " + affectedRecords);
-
         } else {
-            System.out.println("Process failed");
+            String name = console.next();
+            homonyms = lib.searchMember(name);
+            if (homonyms.size() == 1) {
+                borrower = homonyms.get(0);
+            } else if (homonyms.size() > 1) {
+                for (Member member : homonyms) {
+                    System.out.println(member);
+                }
+                System.out.println("Provide Member ID of correct member");
+                int choice = console.nextInt();
+                for (Member member : homonyms) {
+                    if (choice == member.getMemberID()) {
+                        borrower = member;
+                    }
+                }
+            } else  {
+                System.out.println("Member does not exist");
+            }
         }
-    }
 
-    //initialize calendar for loans
-    public static GregorianCalendar getDueDate() {
-        GregorianCalendar dueDate = new GregorianCalendar();
-        dueDate.add(GregorianCalendar.DATE, LOAN_DURATION);
+            do {
+                System.out.println("Enter Book ID to be lent out: ");
+                int bookID = console.nextInt();
 
-        return dueDate;
-    }
+                book = lib.searchBook(bookID);// search on books
+                if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
+                    bookBatch.add(book);
+                } else if (book.getBookState() == BookStateEnum.ISSUED) {
+                    System.out.println("Book already issued");
+                } else {
+                    System.out.println("Book does not exist");
+                }
 
-    //case 7
-    public static void extendMembership(MemberDAO memberDAO, Scanner console) {
-        System.out.println("Provide Member_ID where membership has to be extended with 1 year: ");
-        int memberId = console.nextInt();
-        Member member = memberDAO.getMember(memberId);//Pass MemberID to memberDAO.getMembership
-        memberDAO.extendMembershipYear(memberId);
-        int amount;
-        switch (member.getMembershipType()){
-            case JUNIOR:
-                amount = 5;
-                break;
-            case SENIOR:
-            case STUDENT:
-                amount = 10;
-                break;
-            case NORMAL:
-            default:
-                amount = 15;
-                break;
+                System.out.println("Issue more loans?");
+                String s = console.next();
+
+                if (s.equals("no")) {
+                    stop = true;
+                }
+            } while (!stop);
+
+
+            if (!bookBatch.isEmpty()) {
+                int affectedRecords = lib.issueBook(borrower.getMemberID(), bookBatch, dueDate);
+                if (affectedRecords != 0) {
+                    System.out.println("Total loan records inserted in db: " + affectedRecords);
+                } else {
+                    System.out.println("Process failed");
+                }
+            }
         }
-        System.out.println("Membership extended for 1 year, member has to pay :" + amount + " Euro. Ask for ID or studentID if necessary!"); //Invoicing could be better
+        //initialize calendar for loans
+        public static GregorianCalendar getDueDate () {
+            GregorianCalendar dueDate = new GregorianCalendar();
+            dueDate.add(GregorianCalendar.DATE, LOAN_DURATION);
+
+            return dueDate;
+        }
+
+        //case 7
+        public static void extendMembership (MemberDAO memberDAO, Scanner console){
+            System.out.println("Provide Member_ID where membership has to be extended with 1 year: ");
+            int memberId = console.nextInt();
+            Member member = memberDAO.getMember(memberId);//Pass MemberID to memberDAO.getMembership
+            memberDAO.extendMembershipYear(memberId);
+            int amount;
+            switch (member.getMembershipType()) {
+                case JUNIOR:
+                    amount = 5;
+                    break;
+                case SENIOR:
+                case STUDENT:
+                    amount = 10;
+                    break;
+                case NORMAL:
+                default:
+                    amount = 15;
+                    break;
+            }
+            System.out.println("Membership extended for 1 year, member has to pay :" + amount + " Euro. Ask for ID or studentID if necessary!"); //Invoicing could be better
+        }
+
+
+        //case 8 restarts the login procedure
+        //case 9 breaks out of the console interface loop and ends the program doing so
     }
-
-
-    //case 8 restarts the login procedure
-    //case 9 breaks out of the console interface loop and ends the program doing so
-}

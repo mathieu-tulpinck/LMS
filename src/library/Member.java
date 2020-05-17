@@ -54,15 +54,14 @@ public class Member {
         }
     }
 
-    public Member(int memberID, String name, String address, int phone) {
-        this.membershipType = MembershipEnum.NORMAL;
+    public Member(int memberID, MembershipEnum membershipType, String name, String address, int phone, GregorianCalendar startDate, GregorianCalendar endDate) {
+        this.membershipType = membershipType;
         setMemberID(memberID);
         setLastName(name);
         setAddress(address);
         setPhone(phone);
-        startDateMembership = new GregorianCalendar();
-        endDateMembership = new GregorianCalendar();
-        endDateMembership.add(GregorianCalendar.YEAR, DURATION);
+        startDateMembership = startDate;
+        endDateMembership = endDate;
     }
 
     public int getMemberID() {//needs to be modified
@@ -116,7 +115,6 @@ public class Member {
     @Override
     public String toString() {
         return "library.Member{" +
-                "DURATION=" + DURATION +
                 ", memberID=" + memberID +
                 ", membershipType=" + membershipType.name() +
                 ", firstName='" + firstName + '\'' +

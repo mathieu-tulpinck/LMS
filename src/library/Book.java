@@ -7,7 +7,7 @@ public class Book {
     private int bookID;
     private String title;
     private String author;
-    private BorrowState borrowState;
+    private BookStateEnum bookState;
 
 
     public Book() {
@@ -17,14 +17,14 @@ public class Book {
     public Book(String title, String author) {
         this.title = title;
         this.author = author;
-        this.borrowState = BorrowState.AVAILABLE;
+        this.bookState = BookStateEnum.AVAILABLE;
     }
 
-    public Book(int bookID, String title, String author) {
+    public Book(int bookID, String title, String author, BookStateEnum bookState) {
         this.bookID = bookID;
         this.title = title;
         this.author = author;
-        this.borrowState = BorrowState.AVAILABLE;
+        this.bookState = bookState;
     }
 
     public int getBook_ID() {
@@ -43,12 +43,12 @@ public class Book {
         return author;
     }
 
-    public BorrowState getBorrowState() {
-        return borrowState;
+    public BookStateEnum getBookState() {
+        return bookState;
     }
 
-    public void setBorrowState(BorrowState borrowState) {
-        this.borrowState = borrowState;
+    public void setBookState(BookStateEnum bookState) {
+        this.bookState = bookState;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Book {
                 "bookID=" + bookID +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", borrowState=" + borrowState.name() +
+                ", borrowState=" + bookState.name() +
                 '}';
     }
 

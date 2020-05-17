@@ -26,7 +26,7 @@ public class DatabaseSingleton {
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()){
-                connection = DriverManager.getConnection("jdbc:mysql://dt5.ehb.be/1920mobappgr2","1920mobappgr2","jWqB5N4");
+                connection = DriverManager.getConnection("jdbc:mysql://dt5.ehb.be/1920mobappgr2?useSSL=false","1920mobappgr2","jWqB5N4");
             }
         } catch (SQLException e) {
             e.printStackTrace();

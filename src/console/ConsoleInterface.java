@@ -126,7 +126,7 @@ public class ConsoleInterface {
 
     public static void issueBook(LibraryDAO lib, Scanner console){// Limit number of simultaneous book loans
         Member borrower;
-        Book book = null;
+        Book book;
         ArrayList<Book> bookBatch = new ArrayList<>();
         GregorianCalendar dueDate = getDueDate();
         boolean stop = false;

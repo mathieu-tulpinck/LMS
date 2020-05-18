@@ -37,7 +37,7 @@ public class LibraryDAO extends BaseDAO {
         Date startDate = new Date(member.getStartDateMembership().getTimeInMillis());
         Date endDate = new Date(member.getEndDateMembership().getTimeInMillis());
 
-        String query = "INSERT INTO library.Member" +
+        String query = "INSERT INTO Member" +
                         "(MembershipType, LastName, Address, Phone, StartDate, EndDate)" +
                         "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -78,11 +78,11 @@ public class LibraryDAO extends BaseDAO {
         int result = 0;
 
         if (!newAddress.isEmpty()) {
-            query = "UPDATE library.Member "
+            query = "UPDATE Member "
                     + "SET Address = ? "
                     + "WHERE Member_ID = ?";
         } else {
-            query = "UPDATE library.Member "
+            query = "UPDATE Member "
                     + "SET Phone = ? "
                     + "WHERE Member_ID = ?";
         }
@@ -112,7 +112,7 @@ public class LibraryDAO extends BaseDAO {
     public Member searchMember(int memberID) {
         Member member = null;
         String query = "SELECT * " +
-                "FROM library.Member " +
+                "FROM Member " +
                 "WHERE Member_ID = ?";
 
         try (Connection connection = getConn();
@@ -145,7 +145,7 @@ public class LibraryDAO extends BaseDAO {
     public ArrayList<Integer> addBook(ArrayList<Book> bookBatch) {
         ArrayList<Integer> primaryKeys = new ArrayList<Integer>();
 
-        String query = "INSERT INTO library.Book" +
+        String query = "INSERT INTO Book" +
                 "(Title, Author)" +
                 "VALUES (?, ?)";
 
@@ -178,7 +178,7 @@ public class LibraryDAO extends BaseDAO {
     public Book searchBook(int bookID) {// parameters added to search on title or author. Send back multiple instances via ArrayList
         Book book = null;
         String query = "SELECT * " +
-                "FROM library.Book " +
+                "FROM Book " +
                 "WHERE Book_ID = ?";
 
         try (Connection connection = getConn();
@@ -239,16 +239,6 @@ public class LibraryDAO extends BaseDAO {
     }
 }
 
-     /*public library.Member searchMember(int membershipID) {
-         for (int i = 0; i < memberList.size(); i++) {
-             if (memberList.get(i).getMemberID() == membershipID) {
-                 return (library.Member)(memberList.get(i)); // syntax to be verified
-             }
-         }
-         System.out.println("No match.");
-
-         return null;
-     }*/
 
 
 

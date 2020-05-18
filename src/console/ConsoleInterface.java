@@ -33,6 +33,7 @@ public class ConsoleInterface {
             System.out.println("2. Modify details of a member");
             System.out.println("3. Add books");
             System.out.println("4. Issue books");
+            System.out.println("5. Return books");
 
             System.out.println("7. Extend Membership");
             System.out.println("8. Logout");
@@ -56,6 +57,9 @@ public class ConsoleInterface {
                 case 4:
                     issueBook(lib, console);
                     break;
+
+                case 5:
+                    returnBook(lib, console);
 
                 case 7:
                     extendMembership(memberDAO, console);
@@ -173,15 +177,14 @@ public class ConsoleInterface {
     //case 4
     public static void issueBook(LibraryDAO lib, Scanner console) {// Limit number of simultaneous book loans
         boolean stop = false;
-        boolean validMembership = false;
+        int sum = 0;
+
         Member borrower = null;
         Book book = null;
         String title = "", author = "";
-        GregorianCalendar currentDate = new GregorianCalendar();
         GregorianCalendar dueDate = getDueDate();
+        int[] affectedRecords = new int[2];
 
-
-        ArrayList<Book> bookBatch = new ArrayList<>();
         ArrayList<Book> ambiguousBooks = new ArrayList<>();
         ArrayList<Member> homonyms = new ArrayList<>();
 
@@ -190,12 +193,6 @@ public class ConsoleInterface {
         if (console.hasNextInt()) {
             int memberID = console.nextInt();
             borrower = lib.searchMember(memberID);
-            if (borrower.getEndDateMembership().compareTo(currentDate) > 0) {// if endDate membership is after currentDate
-                System.out.println("Membership valid.");
-                validMembership = true;
-            } else {
-                System.out.println("Membership expired. Ask member whether membership should be renewed");
-            }
             if (borrower == null) {
                 System.out.println("Member does not exist. Ask whether membership should be created");
             }
@@ -215,18 +212,12 @@ public class ConsoleInterface {
                         borrower = member;
                     }
                 }
-                if (borrower.getEndDateMembership().compareTo(currentDate) > 0) {// if endDate membership is after currentDate
-                    System.out.println("Membership valid.");
-                    validMembership = true;
-                } else {
-                    System.out.println("Membership expired. Ask member whether membership should be renewed");
-                }
             } else {
                 System.out.println("Member does not exist. Ask whether membership should be created");
             }
         }
 
-        if (validMembership && (borrower != null)) {
+        if (borrower.checkMembershipValidity(borrower) && (borrower != null)) {
             do {
                 System.out.println("Choose search method to find book:\n "
                         + "1. Searching on BookID\n"
@@ -240,11 +231,10 @@ public class ConsoleInterface {
 
                         book = lib.searchBook(bookID);// search on books
                         if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
-                            bookBatch.add(book);
-                        } else if (book.getBookState() == BookStateEnum.ISSUED) {
-                            System.out.println("Book already issued");
-                        } else {
-                            System.out.println("Book does not exist");
+                            affectedRecords = lib.issueBook(borrower.getMemberID(), book, dueDate);
+                            for (int i : affectedRecords) {
+                                sum += i;
+                            }
                         }
                         break;
                     case 2:
@@ -266,11 +256,10 @@ public class ConsoleInterface {
                             }
                         }
                         if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
-                            bookBatch.add(book);
-                        } else if (book.getBookState() == BookStateEnum.ISSUED) {
-                            System.out.println("Book already issued");
-                        } else {
-                            System.out.println("Book does not exist");
+                            affectedRecords = lib.issueBook(borrower.getMemberID(), book, dueDate);
+                            for (int i : affectedRecords) {
+                                sum += i;
+                            }
                         }
                         break;
                     case 3:
@@ -292,13 +281,23 @@ public class ConsoleInterface {
                             }
                         }
                         if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
-                            bookBatch.add(book);
-                        } else if (book.getBookState() == BookStateEnum.ISSUED) {
-                            System.out.println("Book already issued");
-                        } else {
-                            System.out.println("Book does not exist");
+                            affectedRecords = lib.issueBook(borrower.getMemberID(), book, dueDate);
+                            for (int i : affectedRecords) {
+                                sum += i;
+                            }
                         }
                         break;
+                }
+                if (sum == 2) {
+                    System.out.println("Loan record inserted in db");
+                } else {
+                    System.out.println("Process failed");
+                }
+                if (book.getBookState() == BookStateEnum.ISSUED) {
+                    System.out.println("Book already issued");
+                }
+                if (book == null) {
+                    System.out.println("Book does not exist");
                 }
                 System.out.println("Issue more loans?");
                 String s = console.next();
@@ -307,17 +306,43 @@ public class ConsoleInterface {
                     stop = true;
                 }
             } while (!stop);
+        }
+    }
 
+    public static void returnBook(LibraryDAO lib, Scanner console) {
+        boolean stop = false;
+        int sum = 0;
+        GregorianCalendar returnDate = new GregorianCalendar();
+        GregorianCalendar dueDate = new GregorianCalendar();
 
-            if (!bookBatch.isEmpty()) {
-                int affectedRecords = lib.issueBook(borrower.getMemberID(), bookBatch, dueDate);
-                if (affectedRecords != 0) {
-                    System.out.println("Total loan records inserted in db: " + affectedRecords);
+        do {
+            System.out.println("Provide BookID");
+            int bookID = console.nextInt();
+
+            Book book;
+
+            book = lib.searchBook(bookID);// search on books
+            if (book != null) {
+                dueDate = lib.returnBook(book, returnDate);
+                if (dueDate != null) {
+                    System.out.println("Book return inserted in db ");
                 } else {
                     System.out.println("Process failed");
                 }
+            } else {
+                System.out.println("Book does not exist");
             }
-        }
+
+            verifyDueDate(dueDate);
+
+            System.out.println("Return more books?");
+            String s = console.next();
+
+            if (s.equals("no")) {
+                stop = true;
+            }
+
+        } while(!stop);
     }
 
     //initialize calendar for loans
@@ -350,6 +375,19 @@ public class ConsoleInterface {
         }
         System.out.println("Membership extended for 1 year, member has to pay :" + amount + " Euro. Ask for ID or studentID if necessary!"); //Invoicing could be better
     }
+
+    public static boolean verifyDueDate(GregorianCalendar dueDate) {
+        GregorianCalendar currentDate = new GregorianCalendar();
+
+        if (dueDate.compareTo(currentDate) < 0) {// negative if dueDate is before currentDate
+            System.out.println("Book brought back after due date. Fine to be charged");
+            return true;
+        } else {
+            System.out.println("Book brought back in time");
+            return false;
+        }
+    }
+
 
 
     //case 8 restarts the login procedure

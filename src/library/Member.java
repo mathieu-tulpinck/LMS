@@ -114,8 +114,8 @@ public class Member {
 
     @Override
     public String toString() {
-        return "library.Member{" +
-                ", memberID=" + memberID +
+        return "Member{" +
+                "memberID=" + memberID +
                 ", membershipType=" + membershipType.name() +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -160,5 +160,18 @@ public class Member {
                 member.membershipType = MembershipEnum.SENIOR;
                 break;
         }
+    }
+
+    public boolean checkMembershipValidity(Member borrower) {
+        GregorianCalendar currentDate = new GregorianCalendar();
+
+        if (borrower.getEndDateMembership().compareTo(currentDate) > 0) {// positive if endDate membership is after currentDate
+            System.out.println("Membership valid.");
+            return true;
+        } else {
+            System.out.println("Membership expired. Ask member whether membership should be renewed");
+            return false;
+        }
+
     }
 }

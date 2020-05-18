@@ -1,4 +1,5 @@
 package db;
+
 import library.*;
 
 import java.sql.*;
@@ -45,7 +46,7 @@ public class LibraryDAO extends BaseDAO {
         try (Connection connection = getConn();//try-with-resources statement
 
 
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, member.getMembershipType().name());
             statement.setString(2, member.getLastName());
@@ -149,8 +150,8 @@ public class LibraryDAO extends BaseDAO {
     public ArrayList<Member> searchMember(String name) {
         ArrayList<Member> members = new ArrayList<Member>();
         String query = "SELECT * " +
-                        "FROM Member " +
-                        "WHERE LastName = ?";
+                "FROM Member " +
+                "WHERE LastName = ?";
 
         try (Connection connection = getConn();
              PreparedStatement statement = connection.prepareStatement(query);) {
@@ -183,7 +184,6 @@ public class LibraryDAO extends BaseDAO {
             return members;
         }
     }
-
 
 
     public ArrayList<Integer> addBook(ArrayList<Book> bookBatch) {
@@ -254,14 +254,14 @@ public class LibraryDAO extends BaseDAO {
         ArrayList<Book> books = new ArrayList<>();
         String query;
 
-        if(!title.isEmpty()) {
+        if (!title.isEmpty()) {
             query = "SELECT * " +
-            "FROM Book " +
-            "WHERE Title = ?";
+                    "FROM Book " +
+                    "WHERE Title = ?";
         } else {
             query = "SELECT * " +
-            "FROM Book " +
-            "WHERE Author = ?";
+                    "FROM Book " +
+                    "WHERE Author = ?";
 
         }
 
@@ -308,53 +308,92 @@ public class LibraryDAO extends BaseDAO {
     }
 
 
-    public int issueBook(int memberID, ArrayList<Book> bookBatch, GregorianCalendar parameterDueDate) {
-        int affectedRecords = 0;
+    public int[] issueBook(int memberID, Book book, GregorianCalendar parameterDueDate) {
+        int[] affectedRecord = new int[2];
         Date dueDate = new Date(parameterDueDate.getTimeInMillis());
         BookStateEnum bookState = BookStateEnum.ISSUED;
 
         String query1 = "INSERT INTO Borrowed_Book "
-                        + "(Book_ID, Member_ID, DueDate) "
-                        + "VALUES(?, ?, ?)";
+                + "(Book_ID, Member_ID, DueDate) "
+                + "VALUES(?, ?, ?)";
 
         String query2 = "UPDATE Book "
-                        + "SET BookState = ? "
-                        + "WHERE Book_ID = ?";
+                + "SET BookState = ? "
+                + "WHERE Book_ID = ?";
+
 
         try (Connection connection = getConn();
-             PreparedStatement statement1 = connection.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement statement1 = connection.prepareStatement(query1);
              PreparedStatement statement2 = connection.prepareStatement(query2)) {
 
-            for (Book book : bookBatch) {
+            statement1.setInt(1, book.getBook_ID());
+            statement1.setInt(2, memberID);
+            statement1.setDate(3, dueDate);
 
-                statement1.setInt(1, book.getBook_ID());
-                statement1.setInt(2, memberID);
-                statement1.setDate(3, dueDate);
+            affectedRecord[0] = statement1.executeUpdate();
 
-                statement1.addBatch();
-            }
+            statement2.setString(1, bookState.name());
+            statement2.setInt(2, book.getBook_ID());
 
-            int[] affectedR = statement1.executeBatch();
+            affectedRecord[1] = statement2.executeUpdate();
 
-            for(int num: affectedR) {
-                affectedRecords += num;
-            }
-
-
-            for (Book book: bookBatch) {
-                statement2.setString(1, bookState.name());
-                statement2.setInt(2, book.getBook_ID());
-
-                statement2.addBatch();
-            }
-
-            statement2.executeBatch();
-
-            return affectedRecords;
+            return affectedRecord;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return affectedRecords;
+            return affectedRecord;
+        }
+    }
+
+    public GregorianCalendar returnBook(Book book, GregorianCalendar parameterReturnDate) {
+        int borrowID;
+        GregorianCalendar dueDate = new GregorianCalendar();
+        Date returnDate = new Date(parameterReturnDate.getTimeInMillis());
+        BookStateEnum bookState = BookStateEnum.AVAILABLE;
+
+        String query1 = "SELECT *"
+                + " FROM Borrowed_Book "
+                + " WHERE Book_ID = ?";
+
+        String query2 = "UPDATE Borrowed_Book"
+                    + " Set ReturnDate = ? "
+                    + " WHERE Borrow_ID = ?";
+
+        String query3 = "UPDATE Book "
+                + "SET BookState = ? "
+                + "WHERE Book_ID = ?";
+
+
+        try (Connection connection = getConn();
+             PreparedStatement statement1 = connection.prepareStatement(query1);
+             PreparedStatement statement2 = connection.prepareStatement(query2);
+             PreparedStatement statement3 = connection.prepareStatement(query3)) {
+
+            statement1.setInt(1, book.getBook_ID());
+
+            try (ResultSet resultSet = statement1.executeQuery();) {
+                resultSet.last();
+                borrowID = resultSet.getInt("Borrow_ID");
+                Date retrievedDueDate = resultSet.getDate("DueDate");
+                dueDate.setTime(retrievedDueDate);
+            }
+
+            statement2.setDate(1, returnDate);
+            statement2.setInt(2, borrowID);
+
+            statement2.executeUpdate();
+
+            statement3.setString(1, bookState.name());
+            statement3.setInt(2, book.getBook_ID());
+
+            statement3.executeUpdate();
+
+            return dueDate;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return dueDate;
         }
     }
 }
+

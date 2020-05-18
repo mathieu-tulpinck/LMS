@@ -63,8 +63,8 @@ public class Book {
 
     public Book createBook(Scanner console) {
 
-        String title, author;
-
+        String title ,author;
+        console.useDelimiter(";|\r?\n|\r");
         System.out.println("Provide title:");
         title = console.next();
         System.out.println("Provide author:");
@@ -75,5 +75,3 @@ public class Book {
         return book;
     }
 }
-
-

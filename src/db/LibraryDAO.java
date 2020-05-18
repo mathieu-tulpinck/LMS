@@ -1,4 +1,5 @@
 package db;
+import csvimport.CSVLoader;
 import library.*;
 
 import java.sql.*;
@@ -38,8 +39,9 @@ public class LibraryDAO extends BaseDAO {
         Date endDate = new Date(member.getEndDateMembership().getTimeInMillis());
 
         String query = "INSERT INTO Member" +
-                        "(MembershipType, LastName, Address, Phone, StartDate, EndDate)" +
-                        "VALUES (?, ?, ?, ?, ?, ?)";
+                "(MembershipType, LastName, FirstName, Address, Phone, StartDate, EndDate)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
 
 
         try (Connection connection = getConn();//try-with-resources statement
@@ -49,10 +51,11 @@ public class LibraryDAO extends BaseDAO {
 
             statement.setString(1, member.getMembershipType().name());
             statement.setString(2, member.getLastName());
-            statement.setString(3, member.getAddress());
-            statement.setInt(4, member.getPhone());
-            statement.setDate(5, startDate);
-            statement.setDate(6, endDate);
+            statement.setString(3, member.getFirstName());
+            statement.setString(4, member.getAddress());
+            statement.setInt(5, member.getPhone());
+            statement.setDate(6, startDate);
+            statement.setDate(7, endDate);
 
             statement.executeUpdate();
 
@@ -140,7 +143,30 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    public void showBooks(){
+        try(Connection c = getConn()){
+            Statement s = c.createStatement();
+            String stringQuery = "SELECT Book_ID, Title, Author, BookState FROM Book";
+            ResultSet rs = s.executeQuery(stringQuery);
+            while (rs.next()) {
+                // retrieve and print the values for the current row
+                int book_ID = rs.getInt("Book_ID");
+                String title = rs.getString("Title");
+                String author = rs.getString("Author");
+                String BookState = rs.getString("BookState");
 
+                System.out.println("BookID: " + book_ID);
+                System.out.println("Title: " + title);
+                System.out.println("Author: " + author);
+                System.out.println("Book state: " + BookState);
+                System.out.println("--------------------------");
+
+            }
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+            System.out.println("Problem!");
+        }
+    }
 
     public ArrayList<Integer> addBook(ArrayList<Book> bookBatch) {
         ArrayList<Integer> primaryKeys = new ArrayList<Integer>();
@@ -175,6 +201,30 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    public void addBookcsv(String csvLoc) {
+        try {
+
+            CSVLoader loader = new CSVLoader(getConn());
+
+            loader.loadCSV(csvLoc, "Book");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addBookcsv() {
+        try {
+
+            CSVLoader loader = new CSVLoader(getConn());
+
+            loader.loadCSV("C:\\Users\\olivier.thas\\OneDrive - Dimension Data\\Documents\\Load sample1.csv", "Book");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public Book searchBook(int bookID) {// parameters added to search on title or author. Send back multiple instances via ArrayList
         Book book = null;
         String query = "SELECT * " +
@@ -204,13 +254,12 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
-
     public int issueBook(int memberID, ArrayList<Book> bookBatch, GregorianCalendar parameterDueDate) {
         int affectedRecords = 0;
         Date dueDate = new Date(parameterDueDate.getTimeInMillis());
         String query = "INSERT INTO Borrowed_Book " +
-                        "(Book_ID, Member_ID, DueDate) " +
-                        "VALUES(?, ?, ?)";
+                "(Book_ID, Member_ID, DueDate) " +
+                "VALUES(?, ?, ?)";
 
         try (Connection connection = getConn();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
@@ -239,6 +288,12 @@ public class LibraryDAO extends BaseDAO {
     }
 }
 
-
-
-
+     /*public library.Member searchMember(int membershipID) {
+         for (int i = 0; i < memberList.size(); i++) {
+             if (memberList.get(i).getMemberID() == membershipID) {
+                 return (library.Member)(memberList.get(i)); // syntax to be verified
+             }
+         }
+         System.out.println("No match.");
+         return null;
+     }*/

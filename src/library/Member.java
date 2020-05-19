@@ -133,18 +133,14 @@ public class Member {
 
     @Override
     public String toString() {
-        return "library.Member{" +
-                "DURATION=" + DURATION +
-                ", memberID=" + memberID +
-                ", membershipType=" + membershipType.name() +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", address='" + address + '\'' +
-                ", phone=" + phone +
-                ", password='" + password + '\'' +
-                ", startDateMembership=" + startDateMembership.getTime() +
-                ", endDateMembership=" + endDateMembership.getTime() +
-                '}';
+        return String.format("%-20s %-6d\n", "Member ID: ", memberID) +
+                String.format("%-20s %-50s\n", "First Name:", firstName) +
+                String.format("%-20s %-50s\n", "Last Name:", lastName) +
+                String.format("%-20s %-50s\n", "Address:", address) +
+                String.format("%-20s %-50s\n", "Password:", phone) +
+                String.format("%-20s %-50s\n", "Start membership:", startDateMembership.getTime()) +
+                String.format("%-20s %-50s\n", "End membership:", endDateMembership.getTime());
+
     }
 
     public Member createMember(Scanner console) {

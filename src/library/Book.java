@@ -51,14 +51,14 @@ public class Book {
         this.bookState = this.bookState;
     }
 
+
+
     @Override
     public String toString() {
-        return "library.Book{" +
-                "bookID=" + bookID +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", bookState=" + bookState.name() +
-                '}';
+        return String.format("%-15s %-6d\n", "BookID:", bookID) +
+                String.format("%-15s %-50s\n","Title:", title) +
+                String.format("%-15s %-50s\n", "Author:", author) +
+                String.format("%-15s %-10s\n", "BookState:", bookState.name());
     }
 
     public Book createBook(Scanner console) {

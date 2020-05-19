@@ -326,7 +326,7 @@ public class LibraryDAO extends BaseDAO {
                         String retrievedAuthor = resultSet.getString("Author");
                         BookStateEnum bookState = BookStateEnum.valueOf(resultSet.getString("BookState"));
 
-                        book = new Book(retrievedBookID, title, author, bookState);
+                        book = new Book(retrievedBookID, retrievedTitle, retrievedAuthor, bookState);
                         books.add(book);
                     }
                 }
@@ -340,12 +340,11 @@ public class LibraryDAO extends BaseDAO {
                         String retrievedAuthor = resultSet.getString("Author");
                         BookStateEnum bookState = BookStateEnum.valueOf(resultSet.getString("BookState"));
 
-                        book = new Book(retrievedBookID, title, author, bookState);
+                        book = new Book(retrievedBookID, retrievedTitle, retrievedAuthor, bookState);
                         books.add(book);
                     }
                 }
                 return books;
-
             }
 
         } catch (SQLException throwables) {
@@ -394,7 +393,7 @@ public class LibraryDAO extends BaseDAO {
     }
 
     public GregorianCalendar returnBook(Book book, GregorianCalendar parameterReturnDate) {
-        int borrowID;
+        int borrowID = 0;
         GregorianCalendar dueDate = new GregorianCalendar();
         Date returnDate = new Date(parameterReturnDate.getTimeInMillis());
         BookStateEnum bookState = BookStateEnum.AVAILABLE;
@@ -413,33 +412,36 @@ public class LibraryDAO extends BaseDAO {
 
 
         try (Connection connection = getConn();
-             PreparedStatement statement1 = connection.prepareStatement(query1);
+             PreparedStatement statement1 = connection.prepareStatement(query1, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
              PreparedStatement statement2 = connection.prepareStatement(query2);
              PreparedStatement statement3 = connection.prepareStatement(query3)) {
 
             statement1.setInt(1, book.getBook_ID());
 
-            try (ResultSet resultSet = statement1.executeQuery();) {
-                resultSet.last();
-                borrowID = resultSet.getInt("Borrow_ID");
-                Date retrievedDueDate = resultSet.getDate("DueDate");
-                dueDate.setTime(retrievedDueDate);
+            try (ResultSet resultSet = statement1.executeQuery()) {
+                while (resultSet.next()) {
+                    resultSet.last();
+                    borrowID = resultSet.getInt("Borrow_ID");
+                    Date retrievedDueDate = resultSet.getDate("DueDate");
+                    dueDate.setTime(retrievedDueDate);
+                }
+
+                statement2.setDate(1, returnDate);
+                statement2.setInt(2, borrowID);
+
+                statement2.executeUpdate();
+
+                statement3.setString(1, bookState.name());
+                statement3.setInt(2, book.getBook_ID());
+
+                statement3.executeUpdate();
+
+                return dueDate;
             }
-
-            statement2.setDate(1, returnDate);
-            statement2.setInt(2, borrowID);
-
-            statement2.executeUpdate();
-
-            statement3.setString(1, bookState.name());
-            statement3.setInt(2, book.getBook_ID());
-
-            statement3.executeUpdate();
-
-            return dueDate;
 
         } catch (SQLException e) {
             e.printStackTrace();
+            dueDate.clear();
             return dueDate;
         }
     }

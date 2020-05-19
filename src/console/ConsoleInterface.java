@@ -21,9 +21,10 @@ public class ConsoleInterface {
         int choice = 0;
         //create scanner for console inserts by librarian
         Scanner console = new Scanner(System.in);
+        console.useDelimiter(";|\r?\n|\r");
 
         //Login module, verify username & password
-        login(librarianDAO, console);
+        //login(librarianDAO, console);
 
         System.out.println("Access granted, welcome to the Library Management System!");
 
@@ -121,7 +122,7 @@ public class ConsoleInterface {
         int choice;
         System.out.println("Enter choice (1 - 11): ");
         choice = console.nextInt();
-        while(!(choice > 0) || !(choice < 12)) {
+        while (!(choice > 0) || !(choice < 12)) {
             System.out.println("Input invalid. Try again");
             choice = console.nextInt();
         }
@@ -263,15 +264,13 @@ public class ConsoleInterface {
     public static void issueBook(LibraryDAO lib, Scanner console) {// Limit number of simultaneous book loans
         boolean stop = false;
         int sum = 0;
-
         Member borrower = null;
         Book book = null;
         String title = "", author = "";
         GregorianCalendar dueDate = getDueDate();
-        int[] affectedRecords = new int[2];
-
-        ArrayList<Book> ambiguousBooks = new ArrayList<>();
-        ArrayList<Member> homonyms = new ArrayList<>();
+        int[] affectedRecords;
+        ArrayList<Book> ambiguousBooks;
+        ArrayList<Member> homonyms;
 
 
         System.out.println("Provide Member ID or name: ");
@@ -297,18 +296,22 @@ public class ConsoleInterface {
                         borrower = member;
                     }
                 }
-            } else {
-                System.out.println("Member does not exist. Ask whether membership should be created");
             }
         }
 
-        if (borrower.checkMembershipValidity(borrower) && (borrower != null)) {
+        if (borrower == null) {
+            System.out.println("Member does not exist. Ask whether membership should be created");
+        } else if (borrower.checkMembershipValidity(borrower)) {
             do {
-                System.out.println("Choose search method to find book:\n "
-                        + "1. Searching on BookID\n"
-                        + "2. Searching on Title\n"
-                        + "3. Searching on Author\n");
+                System.out.println("Choose search method to find book (1 - 3):");
+                System.out.println("1. Searching on BookID");
+                System.out.println("2. Searching on Title");
+                System.out.println("3. Searching on Author");
                 int choice = console.nextInt();
+                while (!(choice > 0) || !(choice < 4)) {
+                    System.out.println("Input invalid. Try again");
+                    choice = console.nextInt();
+                }
                 switch (choice) {
                     case 1:
                         System.out.println("Provide BookID");
@@ -375,15 +378,16 @@ public class ConsoleInterface {
                 }
                 if (sum == 2) {
                     System.out.println("Loan record inserted in db");
+
                 } else {
                     System.out.println("Process failed");
+                    if(book.getBookState() == BookStateEnum.ISSUED) {
+                        System.out.println("Book already issued");
+                    }else if (book == null ) {
+                        System.out.println("Book does not exist");
+                    }
                 }
-                if (book.getBookState() == BookStateEnum.ISSUED) {
-                    System.out.println("Book already issued");
-                }
-                if (book == null) {
-                    System.out.println("Book does not exist");
-                }
+
                 System.out.println("Issue more loans?");
                 String s = console.next();
 
@@ -402,21 +406,20 @@ public class ConsoleInterface {
 
     public static void returnBook(LibraryDAO lib, Scanner console) {
         boolean stop = false;
-        int sum = 0;
         GregorianCalendar returnDate = new GregorianCalendar();
         GregorianCalendar dueDate = new GregorianCalendar();
+        Book book;
 
         do {
             System.out.println("Provide BookID");
             int bookID = console.nextInt();
 
-            Book book;
-
             book = lib.searchBook(bookID);// search on books
             if (book != null) {
                 dueDate = lib.returnBook(book, returnDate);
-                if (dueDate != null) {
+                if(dueDate.isSet(GregorianCalendar.YEAR)) {
                     System.out.println("Book return inserted in db ");
+                    verifyDueDate(dueDate);
                 } else {
                     System.out.println("Process failed");
                 }
@@ -424,15 +427,18 @@ public class ConsoleInterface {
                 System.out.println("Book does not exist");
             }
 
-            verifyDueDate(dueDate);
-
             System.out.println("Return more books?");
             String s = console.next();
 
-            if (s.equals("no")) {
-                stop = true;
+            while (!s.equals("yes")) {
+                if (s.equals("no")) {
+                    stop = true;
+                    break;
+                } else {
+                    System.out.println("Invalid input. Try again");
+                    s = console.next();
+                }
             }
-
         } while (!stop);
     }
 

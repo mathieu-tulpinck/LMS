@@ -86,12 +86,11 @@ public class Librarian {
 
     @Override
     public String toString() {
-        return "Librarian{" +
-                "librarianID=" + librarianID +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return String.format("%-15s %-6d\n", "LibrarianID: ", librarianID) +
+                String.format("%-15s %-50s\n", "First Name:", firstName) +
+                String.format("%-15s %-50s\n", "Last Name:", lastName) +
+                String.format("%-15s %-50s\n", "Username:", username) +
+                String.format("%-15s %-50s\n", "Password:", password);
+
     }
 }

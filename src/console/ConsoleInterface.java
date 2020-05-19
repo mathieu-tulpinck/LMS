@@ -67,7 +67,7 @@ public class ConsoleInterface {
                 /*case 6:
                     returnBook(lib, console);
                     break;*/
-                
+
                 case 7:
                     showBooks(lib);
                     break;

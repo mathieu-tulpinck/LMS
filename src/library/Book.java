@@ -52,7 +52,6 @@ public class Book {
     }
 
 
-
     @Override
     public String toString() {
         return String.format("%-15s %-6d\n", "BookID:", bookID) +

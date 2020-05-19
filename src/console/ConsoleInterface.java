@@ -1,4 +1,5 @@
 package console;
+
 import db.*;
 import library.*;
 import org.w3c.dom.ls.LSOutput;
@@ -28,16 +29,16 @@ public class ConsoleInterface {
 
         //interface options after login
         do {
-            System.out.println("Please make a choice between the following options (1 - 9):");
+            System.out.println("Please make a choice between the following options (1 - 11):");
             System.out.println("1. Add member");
-            System.out.println("2. Modify details of a member");
-            System.out.println("3. Add books");
-            System.out.println("4. Mass upload of books (csv-file)");
-            System.out.println("5. Issue books");
-            System.out.println("6. Return books");
+            System.out.println("2. Add librarian");
+            System.out.println("3. Extend Membership");
+            System.out.println("4. Modify details of a member");
+            System.out.println("5. Add books");
+            System.out.println("6. Mass upload of books (csv-file)");
             System.out.println("7. Show books");
-            System.out.println("8. Add librarian");
-            System.out.println("9. Extend Membership");
+            System.out.println("8. Issue books");
+            System.out.println("9. Return books");
             System.out.println("10. Logout");
             System.out.println("11. Exit");
 
@@ -49,35 +50,35 @@ public class ConsoleInterface {
                     break;
 
                 case 2:
-                    updateMember(lib, console);
+                    addLibrarian(librarianDAO, console);
                     break;
 
                 case 3:
-                    addBook(lib, console);
+                    extendMembership(memberDAO, console);
                     break;
 
                 case 4:
-                    loadCSVBooks(lib, console);
+                    updateMember(lib, console);
                     break;
 
                 case 5:
-                    issueBook(lib, console);
+                    addBook(lib, console);
                     break;
 
-                /*case 6:
-                    returnBook(lib, console);
-                    break;*/
+                case 6:
+                    loadCSVBooks(lib, console);
+                    break;
 
                 case 7:
                     showBooks(lib);
                     break;
 
                 case 8:
-                    addLibrarian(librarianDAO, console);
+                    issueBook(lib, console);
                     break;
 
                 case 9:
-                    extendMembership(memberDAO, console);
+                    returnBook(lib, console);
                     break;
 
                 case 10:
@@ -88,12 +89,11 @@ public class ConsoleInterface {
 
                 case 11:
                     System.out.println("LMS shutting down...");
+                    userLoggedin = false;
                     break;
 
-                default:
-                    break;
             }
-        } while (choice != 12);
+        } while (userLoggedin);
     }
 
     //login method
@@ -118,8 +118,13 @@ public class ConsoleInterface {
 
     //take input method
     public static int takeInput(Scanner console) {// safe input method to be designed
-        System.out.println("Enter choice: ");
-        int choice = console.nextInt();
+        int choice;
+        System.out.println("Enter choice (1 - 11): ");
+        choice = console.nextInt();
+        while(!(choice > 0) || !(choice < 12)) {
+            System.out.println("Input invalid. Try again");
+            choice = console.nextInt();
+        }
         return choice;
     }
 
@@ -129,7 +134,11 @@ public class ConsoleInterface {
         Member member = emptyMember.createMember(console);
         System.out.println("Can the member benefit from a reduction? yes / no");
         String choice = console.next();
-        if(choice.equals("yes")) {
+        while (!choice.equals("yes") && !choice.equals("no")) {
+            System.out.println("Invalid input. Try again");
+            choice = console.next();
+        }
+        if (choice.equals("yes")) {
             member.chooseMembershipType(console, member);
         } // else member will keep default normal MembershipType
         int memberID = lib.addMember(member);
@@ -140,6 +149,40 @@ public class ConsoleInterface {
         } else {
             System.out.println("Process failed.");
         }
+    }
+
+    public static void addLibrarian(LibrarianDAO lib, Scanner console) {
+        Librarian librarian = Librarian.createLibrarian(console);
+        int librarianID = lib.addLibrarian(librarian);
+        librarian.setLibrarianID(librarianID);
+
+        if (librarianID != 0) {
+            System.out.println("Librarian created with following details:\n" + librarian);
+        } else {
+            System.out.println("Librarian not created, please try again");
+        }
+    }
+
+    public static void extendMembership(MemberDAO memberDAO, Scanner console) {
+        System.out.println("Provide Member_ID where membership has to be extended with 1 year: ");
+        int memberId = console.nextInt();
+        Member member = memberDAO.getMember(memberId);//Pass MemberID to memberDAO.getMembership
+        memberDAO.extendMembershipYear(memberId);
+        int amount;
+        switch (member.getMembershipType()) {
+            case JUNIOR:
+                amount = 5;
+                break;
+            case SENIOR:
+            case STUDENT:
+                amount = 10;
+                break;
+            case NORMAL:
+            default:
+                amount = 15;
+                break;
+        }
+        System.out.println("Membership extended for 1 year, member has to pay :" + amount + " Euro. Ask for ID or studentID if necessary!"); //Invoicing could be better
     }
 
     //case 2
@@ -172,8 +215,14 @@ public class ConsoleInterface {
             System.out.println("Add more books? yes / no");
             String s = console.next();
 
-            if (s.equals("no")) {
-                stop = true;
+            while (!s.equals("yes")) {
+                if (s.equals("no")) {
+                    stop = true;
+                    break;
+                } else {
+                    System.out.println("Invalid input. Try again");
+                    s = console.next();
+                }
             }
         } while (!stop);
 
@@ -204,6 +253,10 @@ public class ConsoleInterface {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void showBooks(LibraryDAO lib) {
+        lib.showBooks();
     }
 
     //case 4
@@ -334,13 +387,54 @@ public class ConsoleInterface {
                 System.out.println("Issue more loans?");
                 String s = console.next();
 
-                if (s.equals("no")) {
-                    stop = true;
+                while (!s.equals("yes")) {
+                    if (s.equals("no")) {
+                        stop = true;
+                        break;
+                    } else {
+                        System.out.println("Invalid input. Try again");
+                        s = console.next();
+                    }
                 }
             } while (!stop);
         }
     }
 
+    public static void returnBook(LibraryDAO lib, Scanner console) {
+        boolean stop = false;
+        int sum = 0;
+        GregorianCalendar returnDate = new GregorianCalendar();
+        GregorianCalendar dueDate = new GregorianCalendar();
+
+        do {
+            System.out.println("Provide BookID");
+            int bookID = console.nextInt();
+
+            Book book;
+
+            book = lib.searchBook(bookID);// search on books
+            if (book != null) {
+                dueDate = lib.returnBook(book, returnDate);
+                if (dueDate != null) {
+                    System.out.println("Book return inserted in db ");
+                } else {
+                    System.out.println("Process failed");
+                }
+            } else {
+                System.out.println("Book does not exist");
+            }
+
+            verifyDueDate(dueDate);
+
+            System.out.println("Return more books?");
+            String s = console.next();
+
+            if (s.equals("no")) {
+                stop = true;
+            }
+
+        } while (!stop);
+    }
 
 
     //initialize calendar for loans
@@ -352,46 +446,19 @@ public class ConsoleInterface {
     }
 
     //case8
-    public static void showBooks(LibraryDAO lib){
-        lib.showBooks();
-    }
 
-    //case 9
-    public static void addLibrarian(LibrarianDAO lib, Scanner console) {
-        Librarian librarian = Librarian.createLibrarian(console);
-        int librarianID = lib.addLibrarian(librarian);
-        librarian.setLibrarianID(librarianID);
-
-        if (librarianID != 0) {
-            System.out.println("Librarian created with following details:\n" + librarian);
-        } else {
-            System.out.println("Librarian not created, please try again");
-        }
-    }
 
     //case 10
-    public static void extendMembership(MemberDAO memberDAO, Scanner console) {
-        System.out.println("Provide Member_ID where membership has to be extended with 1 year: ");
-        int memberId = console.nextInt();
-        Member member = memberDAO.getMember(memberId);//Pass MemberID to memberDAO.getMembership
-        memberDAO.extendMembershipYear(memberId);
-        int amount;
-        switch (member.getMembershipType()){
-            case JUNIOR:
-                amount = 5;
-                break;
-            case SENIOR:
-            case STUDENT:
-                amount = 10;
-                break;
-            case NORMAL:
-            default:
-                amount = 15;
-                break;
-        }
-        System.out.println("Membership extended for 1 year, member has to pay :" + amount + " Euro. Ask for ID or studentID if necessary!"); //Invoicing could be better
-    }
 
+    public static void verifyDueDate(GregorianCalendar dueDate) {
+        GregorianCalendar currentDate = new GregorianCalendar();
+
+        if (dueDate.compareTo(currentDate) < 0) {// negative if dueDate is before currentDate
+            System.out.println("Book brought back after due date. Fine to be charged");
+        } else {
+            System.out.println("Book brought back in time");
+        }
+    }
 
     //case 8 restarts the login procedure
     //case 9 breaks out of the console interface loop and ends the program doing so

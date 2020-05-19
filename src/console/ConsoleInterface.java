@@ -207,46 +207,137 @@ public class ConsoleInterface {
     }
 
     //case 4
-    public static void issueBook(LibraryDAO lib, Scanner console){// Limit number of simultaneous book loans
-        Member borrower;
-        Book book = null;
-        ArrayList<Book> bookBatch = new ArrayList<>();
-        GregorianCalendar dueDate = getDueDate();
+    public static void issueBook(LibraryDAO lib, Scanner console) {// Limit number of simultaneous book loans
         boolean stop = false;
+        int sum = 0;
 
-        System.out.println("Provide Member ID: ");
-        int memberID = console.nextInt();
+        Member borrower = null;
+        Book book = null;
+        String title = "", author = "";
+        GregorianCalendar dueDate = getDueDate();
+        int[] affectedRecords = new int[2];
 
-        borrower = lib.searchMember(memberID);
-        if(borrower == null) {
-            System.out.println("Member does not exist");// createMember functionality // check membership validity
+        ArrayList<Book> ambiguousBooks = new ArrayList<>();
+        ArrayList<Member> homonyms = new ArrayList<>();
+
+
+        System.out.println("Provide Member ID or name: ");
+        if (console.hasNextInt()) {
+            int memberID = console.nextInt();
+            borrower = lib.searchMember(memberID);
+            if (borrower == null) {
+                System.out.println("Member does not exist. Ask whether membership should be created");
+            }
+        } else {
+            String name = console.next();
+            homonyms = lib.searchMember(name);
+            if (homonyms.size() == 1) {
+                borrower = homonyms.get(0);
+            } else if (homonyms.size() > 1) {
+                for (Member member : homonyms) {
+                    System.out.println(member);
+                }
+                System.out.println("Provide Member ID of correct member:");
+                int choice = console.nextInt();
+                for (Member member : homonyms) {
+                    if (choice == member.getMemberID()) {
+                        borrower = member;
+                    }
+                }
+            } else {
+                System.out.println("Member does not exist. Ask whether membership should be created");
+            }
         }
 
-        do {
-            System.out.println("Enter Book ID to be lent out: ");
-            int bookID = console.nextInt();
+        if (borrower.checkMembershipValidity(borrower) && (borrower != null)) {
+            do {
+                System.out.println("Choose search method to find book:\n "
+                        + "1. Searching on BookID\n"
+                        + "2. Searching on Title\n"
+                        + "3. Searching on Author\n");
+                int choice = console.nextInt();
+                switch (choice) {
+                    case 1:
+                        System.out.println("Provide BookID");
+                        int bookID = console.nextInt();
 
-            book = lib.searchBook(bookID);// search on books
-            if(book != null) {
-                bookBatch.add(book);
-            } else {
-                System.out.println("Book does not exist");
-            }
+                        book = lib.searchBook(bookID);// search on books
+                        if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
+                            affectedRecords = lib.issueBook(borrower.getMemberID(), book, dueDate);
+                            for (int i : affectedRecords) {
+                                sum += i;
+                            }
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Provide title:");
+                        title = console.next();
+                        ambiguousBooks = lib.searchBook(title, author);
+                        if (ambiguousBooks.size() == 1) {
+                            book = ambiguousBooks.get(0);
+                        } else if (ambiguousBooks.size() > 1) {
+                            for (Book bookInAmbiguousBooks : ambiguousBooks) {
+                                System.out.println(bookInAmbiguousBooks);
+                            }
+                            System.out.println("Provide Book ID of correct book");
+                            int correctBook = console.nextInt();
+                            for (Book bookInAmbiguousBooks : ambiguousBooks) {
+                                if (correctBook == bookInAmbiguousBooks.getBook_ID()) {
+                                    book = bookInAmbiguousBooks;
+                                }
+                            }
+                        }
+                        if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
+                            affectedRecords = lib.issueBook(borrower.getMemberID(), book, dueDate);
+                            for (int i : affectedRecords) {
+                                sum += i;
+                            }
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Author:");
+                        author = console.next();
+                        ambiguousBooks = lib.searchBook(title, author);
+                        if (ambiguousBooks.size() == 1) {
+                            book = ambiguousBooks.get(0);
+                        } else if (ambiguousBooks.size() > 1) {
+                            for (Book bookInAmbiguousBooks : ambiguousBooks) {
+                                System.out.println(bookInAmbiguousBooks);
+                            }
+                            System.out.println("Provide Book ID of correct book");
+                            int correctBook = console.nextInt();
+                            for (Book bookInAmbiguousBooks : ambiguousBooks) {
+                                if (correctBook == bookInAmbiguousBooks.getBook_ID()) {
+                                    book = bookInAmbiguousBooks;
+                                }
+                            }
+                        }
+                        if (book != null && (book.getBookState() != BookStateEnum.ISSUED)) {
+                            affectedRecords = lib.issueBook(borrower.getMemberID(), book, dueDate);
+                            for (int i : affectedRecords) {
+                                sum += i;
+                            }
+                        }
+                        break;
+                }
+                if (sum == 2) {
+                    System.out.println("Loan record inserted in db");
+                } else {
+                    System.out.println("Process failed");
+                }
+                if (book.getBookState() == BookStateEnum.ISSUED) {
+                    System.out.println("Book already issued");
+                }
+                if (book == null) {
+                    System.out.println("Book does not exist");
+                }
+                System.out.println("Issue more loans?");
+                String s = console.next();
 
-            System.out.println("Issue more loans? yes / no");
-            String s = console.next();
-
-            if (s.equals("no")) {
-                stop = true;
-            }
-        } while (!stop);
-
-        int affectedRecords = lib.issueBook(borrower.getMemberID(), bookBatch, dueDate);
-        if(affectedRecords != 0) {
-            System.out.println("Total loan records inserted in database: " + affectedRecords);
-
-        } else {
-            System.out.println("Process failed");
+                if (s.equals("no")) {
+                    stop = true;
+                }
+            } while (!stop);
         }
     }
 

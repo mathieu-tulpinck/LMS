@@ -43,11 +43,10 @@ public class LibraryDAO extends BaseDAO {
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 
-
         try (Connection connection = getConn();//try-with-resources statement
 
 
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
 
             statement.setString(1, member.getMembershipType().name());
             statement.setString(2, member.getLastName());
@@ -123,15 +122,21 @@ public class LibraryDAO extends BaseDAO {
 
             statement.setInt(1, memberID);
 
-            try (ResultSet resultSet = statement.executeQuery();) {
+            try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     int retrievedMemberID = resultSet.getInt("Member_ID");
+                    MembershipEnum membershipType = MembershipEnum.valueOf(resultSet.getString("MembershipType"));
                     String name = resultSet.getString("LastName");
                     String address = resultSet.getString("Address");
                     int phone = resultSet.getInt("Phone");
+                    Date retrievedStartDate = resultSet.getDate("StartDate");
+                    Date retrievedEndDate = resultSet.getDate("EndDate");
+                    GregorianCalendar startDate = new GregorianCalendar();
+                    startDate.setTime(retrievedStartDate);
+                    GregorianCalendar endDate = new GregorianCalendar();
+                    endDate.setTime(retrievedEndDate);
 
-                    member = new Member(retrievedMemberID, name, address, phone);
-
+                    member = new Member(retrievedMemberID, membershipType, name, address, phone, startDate, endDate);
                 }
             }
             return member;
@@ -143,8 +148,46 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
-    public void showBooks(){
-        try(Connection c = getConn()){
+    public ArrayList<Member> searchMember(String name) {
+        ArrayList<Member> members = new ArrayList<Member>();
+        String query = "SELECT * " +
+                "FROM Member " +
+                "WHERE LastName = ?";
+
+        try (Connection connection = getConn();
+             PreparedStatement statement = connection.prepareStatement(query);) {
+
+            statement.setString(1, name);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int memberID = resultSet.getInt("Member_ID");
+                    MembershipEnum membershipType = MembershipEnum.valueOf(resultSet.getString("MembershipType"));
+                    String retrievedName = resultSet.getString("LastName");
+                    String address = resultSet.getString("Address");
+                    int phone = resultSet.getInt("Phone");
+                    Date retrievedStartDate = resultSet.getDate("StartDate");
+                    Date retrievedEndDate = resultSet.getDate("EndDate");
+                    GregorianCalendar startDate = new GregorianCalendar();
+                    startDate.setTime(retrievedStartDate);
+                    GregorianCalendar endDate = new GregorianCalendar();
+                    endDate.setTime(retrievedEndDate);
+
+                    Member member = new Member(memberID, membershipType, retrievedName, address, phone, startDate, endDate);
+                    members.add(member);
+                }
+            }
+            return members;
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
+
+            return members;
+        }
+    }
+
+    public void showBooks() {
+        try (Connection c = getConn()) {
             Statement s = c.createStatement();
             String stringQuery = "SELECT Book_ID, Title, Author, BookState FROM Book";
             ResultSet rs = s.executeQuery(stringQuery);
@@ -162,7 +205,7 @@ public class LibraryDAO extends BaseDAO {
                 System.out.println("--------------------------");
 
             }
-        } catch (SQLException throwables){
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
             System.out.println("Problem!");
         }
@@ -232,7 +275,7 @@ public class LibraryDAO extends BaseDAO {
                 "WHERE Book_ID = ?";
 
         try (Connection connection = getConn();
-             PreparedStatement statement = connection.prepareStatement(query);) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, bookID);
 
@@ -241,8 +284,9 @@ public class LibraryDAO extends BaseDAO {
                     int retrievedBookID = resultSet.getInt("Book_ID");
                     String title = resultSet.getString("Title");
                     String author = resultSet.getString("Author");
+                    BookStateEnum bookState = BookStateEnum.valueOf(resultSet.getString("BookState"));
 
-                    book = new Book(retrievedBookID, title, author);
+                    book = new Book(retrievedBookID, title, author, bookState);
                 }
             }
             return book;
@@ -254,46 +298,149 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
-    public int issueBook(int memberID, ArrayList<Book> bookBatch, GregorianCalendar parameterDueDate) {
-        int affectedRecords = 0;
-        Date dueDate = new Date(parameterDueDate.getTimeInMillis());
-        String query = "INSERT INTO Borrowed_Book " +
-                "(Book_ID, Member_ID, DueDate) " +
-                "VALUES(?, ?, ?)";
+    public ArrayList<Book> searchBook(String title, String author) {
+        Book book = null;
+        ArrayList<Book> books = new ArrayList<>();
+        String query;
+
+        if (!title.isEmpty()) {
+            query = "SELECT * " +
+                    "FROM Book " +
+                    "WHERE Title = ?";
+        } else {
+            query = "SELECT * " +
+                    "FROM Book " +
+                    "WHERE Author = ?";
+
+        }
 
         try (Connection connection = getConn();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
-            for (Book book : bookBatch) {
+            if (!title.isEmpty()) {
+                statement.setString(1, title);
+                try (ResultSet resultSet = statement.executeQuery();) {
+                    while (resultSet.next()) {
+                        int retrievedBookID = resultSet.getInt("Book_ID");
+                        String retrievedTitle = resultSet.getString("Title");
+                        String retrievedAuthor = resultSet.getString("Author");
+                        BookStateEnum bookState = BookStateEnum.valueOf(resultSet.getString("BookState"));
 
-                statement.setInt(1, book.getBook_ID());
-                statement.setInt(2, memberID);
-                statement.setDate(3, dueDate);
+                        book = new Book(retrievedBookID, title, author, bookState);
+                        books.add(book);
+                    }
+                }
+                return books;
+            } else {
+                statement.setString(1, author);
+                try (ResultSet resultSet = statement.executeQuery();) {
+                    while (resultSet.next()) {
+                        int retrievedBookID = resultSet.getInt("Book_ID");
+                        String retrievedTitle = resultSet.getString("Title");
+                        String retrievedAuthor = resultSet.getString("Author");
+                        BookStateEnum bookState = BookStateEnum.valueOf(resultSet.getString("BookState"));
 
-                statement.addBatch();
+                        book = new Book(retrievedBookID, title, author, bookState);
+                        books.add(book);
+                    }
+                }
+                return books;
+
             }
 
-            int[] affectedR = statement.executeBatch();
+        } catch (SQLException throwables) {
+            System.out.println("Failure!");
+            throwables.printStackTrace();
 
-            for(int num: affectedR) {
-                affectedRecords += num;
-            }
+            return books;
+        }
+    }
 
-            return affectedRecords;
+    public int[] issueBook(int memberID, Book book, GregorianCalendar parameterDueDate) {
+        int[] affectedRecord = new int[2];
+        Date dueDate = new Date(parameterDueDate.getTimeInMillis());
+        BookStateEnum bookState = BookStateEnum.ISSUED;
+
+        String query1 = "INSERT INTO Borrowed_Book "
+                + "(Book_ID, Member_ID, DueDate) "
+                + "VALUES(?, ?, ?)";
+
+        String query2 = "UPDATE Book "
+                + "SET BookState = ? "
+                + "WHERE Book_ID = ?";
+
+
+        try (Connection connection = getConn();
+             PreparedStatement statement1 = connection.prepareStatement(query1);
+             PreparedStatement statement2 = connection.prepareStatement(query2)) {
+
+            statement1.setInt(1, book.getBook_ID());
+            statement1.setInt(2, memberID);
+            statement1.setDate(3, dueDate);
+
+            affectedRecord[0] = statement1.executeUpdate();
+
+            statement2.setString(1, bookState.name());
+            statement2.setInt(2, book.getBook_ID());
+
+            affectedRecord[1] = statement2.executeUpdate();
+
+            return affectedRecord;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return affectedRecords;
+            return affectedRecord;
+        }
+    }
+
+    public GregorianCalendar returnBook(Book book, GregorianCalendar parameterReturnDate) {
+        int borrowID;
+        GregorianCalendar dueDate = new GregorianCalendar();
+        Date returnDate = new Date(parameterReturnDate.getTimeInMillis());
+        BookStateEnum bookState = BookStateEnum.AVAILABLE;
+
+        String query1 = "SELECT *"
+                + " FROM Borrowed_Book "
+                + " WHERE Book_ID = ?";
+
+        String query2 = "UPDATE Borrowed_Book"
+                + " Set ReturnDate = ? "
+                + " WHERE Borrow_ID = ?";
+
+        String query3 = "UPDATE Book "
+                + "SET BookState = ? "
+                + "WHERE Book_ID = ?";
+
+
+        try (Connection connection = getConn();
+             PreparedStatement statement1 = connection.prepareStatement(query1);
+             PreparedStatement statement2 = connection.prepareStatement(query2);
+             PreparedStatement statement3 = connection.prepareStatement(query3)) {
+
+            statement1.setInt(1, book.getBook_ID());
+
+            try (ResultSet resultSet = statement1.executeQuery();) {
+                resultSet.last();
+                borrowID = resultSet.getInt("Borrow_ID");
+                Date retrievedDueDate = resultSet.getDate("DueDate");
+                dueDate.setTime(retrievedDueDate);
+            }
+
+            statement2.setDate(1, returnDate);
+            statement2.setInt(2, borrowID);
+
+            statement2.executeUpdate();
+
+            statement3.setString(1, bookState.name());
+            statement3.setInt(2, book.getBook_ID());
+
+            statement3.executeUpdate();
+
+            return dueDate;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return dueDate;
         }
     }
 }
-
-     /*public library.Member searchMember(int membershipID) {
-         for (int i = 0; i < memberList.size(); i++) {
-             if (memberList.get(i).getMemberID() == membershipID) {
-                 return (library.Member)(memberList.get(i)); // syntax to be verified
-             }
-         }
-         System.out.println("No match.");
-         return null;
-     }*/

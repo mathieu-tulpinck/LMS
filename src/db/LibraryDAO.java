@@ -352,7 +352,7 @@ public class LibraryDAO extends BaseDAO {
 
     // method used to record the lending of Books to Members
     public int[] issueBook(int memberID, Book book, GregorianCalendar parameterDueDate) {
-        int[] affectedRecord = new int[2];
+        int[] affectedRecords = new int[2];
         Date dueDate = new Date(parameterDueDate.getTimeInMillis());
         BookStateEnum bookState = BookStateEnum.ISSUED;
 
@@ -373,18 +373,18 @@ public class LibraryDAO extends BaseDAO {
             statement1.setInt(2, memberID);
             statement1.setDate(3, dueDate);
 
-            affectedRecord[0] = statement1.executeUpdate();
+            affectedRecords[0] = statement1.executeUpdate();
 
             statement2.setString(1, bookState.name());
             statement2.setInt(2, book.getBook_ID());
 
-            affectedRecord[1] = statement2.executeUpdate();
+            affectedRecords[1] = statement2.executeUpdate();
 
-            return affectedRecord;
+            return affectedRecords;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return affectedRecord;
+            return affectedRecords;
         }
     }
 

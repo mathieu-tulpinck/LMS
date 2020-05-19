@@ -13,7 +13,7 @@ public class ConsoleInterface {
 
     public static void main(String[] args) {
 
-        LibraryDAO lib = new LibraryDAO();
+        LibraryDAO lib = LibraryDAO.getInstance();
         LibrarianDAO librarianDAO = new LibrarianDAO();
         MemberDAO memberDAO = new MemberDAO();
 
@@ -326,6 +326,8 @@ public class ConsoleInterface {
                             for (int i : affectedRecords) {
                                 sum += i;
                             }
+                        } else {
+                            sum -= 1;
                         }
                         break;
                     case 2:
@@ -351,6 +353,8 @@ public class ConsoleInterface {
                             for (int i : affectedRecords) {
                                 sum += i;
                             }
+                        } else {
+                            sum -= 1;
                         }
                         break;
                     case 3:
@@ -376,18 +380,20 @@ public class ConsoleInterface {
                             for (int i : affectedRecords) {
                                 sum += i;
                             }
+                        } else {
+                            sum -= 1;
                         }
                         break;
                 }
-                if (sum == 2) {
+                if (sum % 2 == 0) {
                     System.out.println("Loan record inserted in db");
 
                 } else {
                     System.out.println("Process failed");
-                    if (book.getBookState() == BookStateEnum.ISSUED) {
-                        System.out.println("Book already issued");
-                    } else if (book == null) {
+                    if (book == null) {
                         System.out.println("Book does not exist");
+                    } else if (book.getBookState() == BookStateEnum.ISSUED) {
+                        System.out.println("Book already issued");
                     }
                 }
 

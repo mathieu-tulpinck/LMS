@@ -10,7 +10,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ff1a72c-8838-4bc4-a917-0154e133b273" name="Default Changelist" comment="" />
+    <list default="true" id="6ff1a72c-8838-4bc4-a917-0154e133b273" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/com_opencsv_opencsv_5_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -129,7 +133,7 @@
       <workItem from="1589631625754" duration="7613000" />
       <workItem from="1589746448045" duration="1696000" />
       <workItem from="1589839829789" duration="218000" />
-      <workItem from="1589863923808" duration="2998000" />
+      <workItem from="1589863923808" duration="3612000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;This is my third commit&quot;">
       <created>1588691076913</created>
@@ -236,7 +240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589866606017</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="&quot;Project structure fixed&quot;">
+      <created>1589867260659</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1589867260659</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -267,15 +278,16 @@
     <MESSAGE value="Librarian fixed" />
     <MESSAGE value="&quot;test&quot;" />
     <MESSAGE value="&quot;Code alignment&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;Code alignment&quot;" />
+    <MESSAGE value="&quot;Project structure fixed&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;Project structure fixed&quot;" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="451" y="108" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589836012824">
+    <state x="451" y="108" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589867396341">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state x="2371" y="90" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589393819217" />
     <state x="361" y="71" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1589020961089" />
-    <state x="451" y="108" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589836012824" />
+    <state x="451" y="108" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589867396341" />
     <state x="234" y="151" key="#com.intellij.ide.util.MemberChooser" timestamp="1589622373738">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -302,14 +314,14 @@
     </state>
     <state x="270" y="171" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1589654054859" />
     <state x="338" y="226" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589790333293" />
-    <state x="567" y="87" key="CommitChangelistDialog2" timestamp="1589866605676">
+    <state x="567" y="87" key="CommitChangelistDialog2" timestamp="1589867260093">
       <screen x="0" y="23" width="1920" height="977" />
     </state>
     <state x="454" y="14" key="CommitChangelistDialog2/0.0.1536.824/-1920.-233.1920.1040@0.0.1536.824" timestamp="1589746524395" />
     <state x="454" y="14" key="CommitChangelistDialog2/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1589474659386" />
     <state x="2488" y="18" key="CommitChangelistDialog2/0.0.1536.824/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589481275190" />
     <state x="454" y="14" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1589049709329" />
-    <state x="567" y="87" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589866605676" />
+    <state x="567" y="87" key="CommitChangelistDialog2/0.23.1920.977/-1440.153.1440.877@0.23.1920.977" timestamp="1589867260093" />
     <state x="235" y="128" key="DetectedRootsChooserDialog" timestamp="1589631761644">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

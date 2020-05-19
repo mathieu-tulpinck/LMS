@@ -48,21 +48,21 @@ public class Book {
     }
 
     public void setBookState(BookStateEnum bookState) {
-        this.bookState = this.bookState;
+        this.bookState = bookState;
     }
 
 
     @Override
     public String toString() {
         return String.format("%-15s %-6d\n", "BookID:", bookID) +
-                String.format("%-15s %-50s\n","Title:", title) +
+                String.format("%-15s %-50s\n", "Title:", title) +
                 String.format("%-15s %-50s\n", "Author:", author) +
                 String.format("%-15s %-10s\n", "BookState:", bookState.name());
     }
 
     public Book createBook(Scanner console) {
 
-        String title ,author;
+        String title, author;
         console.useDelimiter(";|\r?\n|\r");
         System.out.println("Provide title:");
         title = console.next();

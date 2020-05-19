@@ -60,11 +60,6 @@ public class Librarian {
     public Librarian() {
     }
 
-    public void printInfo() {
-        System.out.println("Librarian ID = " + librarianID);
-        System.out.println("name = " + firstName);
-    }
-
     public static Librarian createLibrarian(Scanner console) {
 
         System.out.println("Librarian first name:");

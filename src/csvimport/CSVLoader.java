@@ -24,20 +24,20 @@ public class CSVLoader {
     public void loadCSV(String csvFile, String tableName) throws Exception {
 
         CSVReader csvReader;
-        if(this.connection == null) {
+        if (this.connection == null) {
             throw new Exception("Not a valid connection.");
         }
         try {
             csvReader = new CSVReader(new FileReader(csvFile));
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception("Error occured while executing file. " + e.getMessage());
+            throw new Exception("Error occurred while executing file. " + e.getMessage());
         }
 
         String[] headerRow = csvReader.readNext();
 
         if (headerRow == null) {
-            throw new FileNotFoundException( "No columns defined in given CSV file." + "Please check the CSV file format.");
+            throw new FileNotFoundException("No columns defined in given CSV file." + "Please check the CSV file format.");
         }
 
         String questionmarks = StringUtils.repeat("?,", headerRow.length);
@@ -62,7 +62,7 @@ public class CSVLoader {
             while ((nextLine = csvReader.readNext()) != null) {
 
                 if (nextLine != null) {
-                    int index = 1; //op index 0 staan de titels
+                    int index = 1;
                     for (String string : nextLine) {
                         ps.setString(index++, string);
                     }
@@ -73,12 +73,12 @@ public class CSVLoader {
                     ps.executeBatch();
                 }
             }
-            ps.executeBatch(); // insert remaining records
+            ps.executeBatch();
             con.commit();
         } catch (Exception e) {
             con.rollback();
             e.printStackTrace();
-            throw new Exception("Error occured while loading data from file to database. " + e.getMessage());
+            throw new Exception("Error occurred while loading data from file to database. " + e.getMessage());
         } finally {
             if (ps != null)
                 ps.close();

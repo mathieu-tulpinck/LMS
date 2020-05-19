@@ -2,14 +2,13 @@ package console;
 
 import db.*;
 import library.*;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.*;
 
 public class ConsoleInterface {
 
     public static String userNameLibrarian;
-    public static boolean userLoggedin = false;
+    public static boolean userLoggedIn = false;
     public static final int LOAN_DURATION = 30;
 
     public static void main(String[] args) {
@@ -18,13 +17,13 @@ public class ConsoleInterface {
         LibrarianDAO librarianDAO = new LibrarianDAO();
         MemberDAO memberDAO = new MemberDAO();
 
-        int choice = 0;
-        //create scanner for console inserts by librarian
         Scanner console = new Scanner(System.in);
         console.useDelimiter(";|\r?\n|\r");
 
+        int choice;
+
         //Login module, verify username & password
-        //login(librarianDAO, console);
+        login(librarianDAO, console);
 
         System.out.println("Access granted, welcome to the Library Management System!");
 
@@ -83,18 +82,18 @@ public class ConsoleInterface {
                     break;
 
                 case 10:
-                    userLoggedin = false; //user gets logged out
-                    System.out.println(userNameLibrarian + " succesfully logged out");
+                    userLoggedIn = false; //user gets logged out
+                    System.out.println(userNameLibrarian + " successfully logged out");
                     login(librarianDAO, console);
                     break;
 
                 case 11:
                     System.out.println("LMS shutting down...");
-                    userLoggedin = false;
+                    userLoggedIn = false;
                     break;
 
             }
-        } while (userLoggedin);
+        } while (userLoggedIn);
     }
 
     //login method
@@ -107,17 +106,17 @@ public class ConsoleInterface {
             String password = console.next();
 
             //pass username and password to LibrarianDAO
-            userLoggedin = librarianDAO.verifyUserPassword(userName, password);
+            userLoggedIn = librarianDAO.verifyUserPassword(userName, password);
 
-            if (userLoggedin) {
+            if (userLoggedIn) {
                 userNameLibrarian = userName;
             } else {
                 System.out.println("Login failed, try again with correct username & password");
             }
-        } while (!userLoggedin);
+        } while (!userLoggedIn);
     }
 
-    //take input method
+    //safe input method
     public static int takeInput(Scanner console) {// safe input method to be designed
         int choice;
         System.out.println("Enter choice (1 - 11): ");
@@ -145,13 +144,14 @@ public class ConsoleInterface {
         int memberID = lib.addMember(member);
         member.setMemberID(memberID);
 
-        if (memberID != 0) {
+        if (memberID != -1) {
             System.out.println("library.Member created with following details:\n" + member);
         } else {
             System.out.println("Process failed.");
         }
     }
 
+    //case 2
     public static void addLibrarian(LibrarianDAO lib, Scanner console) {
         Librarian librarian = Librarian.createLibrarian(console);
         int librarianID = lib.addLibrarian(librarian);
@@ -164,6 +164,7 @@ public class ConsoleInterface {
         }
     }
 
+    //case 3
     public static void extendMembership(MemberDAO memberDAO, Scanner console) {
         System.out.println("Provide Member_ID where membership has to be extended with 1 year: ");
         int memberId = console.nextInt();
@@ -186,7 +187,7 @@ public class ConsoleInterface {
         System.out.println("Membership extended for 1 year, member has to pay :" + amount + " Euro. Ask for ID or studentID if necessary!"); //Invoicing could be better
     }
 
-    //case 2
+    //case 4
     public static void updateMember(LibraryDAO lib, Scanner console) {
         int newPhone = 0;
         String newAddress = "";
@@ -199,16 +200,19 @@ public class ConsoleInterface {
         } else {
             newAddress = console.next();
         }
-        if (lib.updateMember(memberID, newAddress, newPhone) != 0)
+        if (lib.updateMember(memberID, newAddress, newPhone) != -1) {
             System.out.println("Details of member " + memberID + " updated.");
+        } else {
+            System.out.println("Process failed");
+        }
     }
 
-    //case 3
+    //case 5
     public static void addBook(LibraryDAO lib, Scanner console) {
         Book book = new Book();
         boolean stop = false;
         ArrayList<Book> bookBatch = new ArrayList<Book>();
-        ArrayList<Integer> bookIDs = new ArrayList<Integer>();
+        ArrayList<Integer> bookIDs;
         do {
             book = book.createBook(console);
             bookBatch.add(book);// only add if book != null
@@ -240,7 +244,7 @@ public class ConsoleInterface {
         }
     }
 
-    //case 5
+    //case 6
     public static void loadCSVBooks(LibraryDAO lib, Scanner console) {
         try {
             console.useDelimiter(";|\r?\n|\r");
@@ -249,19 +253,18 @@ public class ConsoleInterface {
             String csvLocation = console.next();
             lib.addBookcsv(csvLocation);
 
-//            lib.addBookcsv();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    //case 7
     public static void showBooks(LibraryDAO lib) {
         lib.showBooks();
     }
 
-    //case 4
-    public static void issueBook(LibraryDAO lib, Scanner console) {// Limit number of simultaneous book loans
+    //case 8
+    public static void issueBook(LibraryDAO lib, Scanner console) {
         boolean stop = false;
         int sum = 0;
         Member borrower = null;
@@ -381,9 +384,9 @@ public class ConsoleInterface {
 
                 } else {
                     System.out.println("Process failed");
-                    if(book.getBookState() == BookStateEnum.ISSUED) {
+                    if (book.getBookState() == BookStateEnum.ISSUED) {
                         System.out.println("Book already issued");
-                    }else if (book == null ) {
+                    } else if (book == null) {
                         System.out.println("Book does not exist");
                     }
                 }
@@ -404,10 +407,11 @@ public class ConsoleInterface {
         }
     }
 
+    // case 9
     public static void returnBook(LibraryDAO lib, Scanner console) {
         boolean stop = false;
         GregorianCalendar returnDate = new GregorianCalendar();
-        GregorianCalendar dueDate = new GregorianCalendar();
+        GregorianCalendar dueDate;
         Book book;
 
         do {
@@ -417,7 +421,7 @@ public class ConsoleInterface {
             book = lib.searchBook(bookID);// search on books
             if (book != null) {
                 dueDate = lib.returnBook(book, returnDate);
-                if(dueDate.isSet(GregorianCalendar.YEAR)) {
+                if (dueDate.isSet(GregorianCalendar.YEAR)) {
                     System.out.println("Book return inserted in db ");
                     verifyDueDate(dueDate);
                 } else {
@@ -451,21 +455,16 @@ public class ConsoleInterface {
         return dueDate;
     }
 
-    //case8
-
-
-    //case 10
-
+    // verify whether book was returned in time
     public static void verifyDueDate(GregorianCalendar dueDate) {
         GregorianCalendar currentDate = new GregorianCalendar();
 
-        if (dueDate.compareTo(currentDate) < 0) {// negative if dueDate is before currentDate
-            System.out.println("Book brought back after due date. Fine to be charged");
-        } else {
-            System.out.println("Book brought back in time");
+        if (dueDate.compareTo(currentDate) < 0) {
+            if (dueDate.compareTo(currentDate) < 0) {
+                System.out.println("Book brought back after due date. Fine to be charged");
+            } else {
+                System.out.println("Book brought back in time");
+            }
         }
     }
-
-    //case 8 restarts the login procedure
-    //case 9 breaks out of the console interface loop and ends the program doing so
 }

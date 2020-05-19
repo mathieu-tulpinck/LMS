@@ -1,4 +1,5 @@
 package db;
+
 import csvimport.CSVLoader;
 import library.*;
 
@@ -9,8 +10,6 @@ import java.util.*;
 // class used to coordinate business logic
 public class LibraryDAO extends BaseDAO {
 
-    // constants regarding working of library. To be initialized.
-    public final int reservationDuration = 0;
     private static volatile LibraryDAO instance = null;
 
     public LibraryDAO() {
@@ -30,10 +29,10 @@ public class LibraryDAO extends BaseDAO {
         return instance;
     }
 
-
+    // insert new Member in db
     public int addMember(Member member) {
 
-        int primaryKey = 0;
+        int primaryKey = -1;
 
         Date startDate = new Date(member.getStartDateMembership().getTimeInMillis());
         Date endDate = new Date(member.getEndDateMembership().getTimeInMillis());
@@ -46,7 +45,7 @@ public class LibraryDAO extends BaseDAO {
         try (Connection connection = getConn();//try-with-resources statement
 
 
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, member.getMembershipType().name());
             statement.setString(2, member.getLastName());
@@ -58,7 +57,7 @@ public class LibraryDAO extends BaseDAO {
 
             statement.executeUpdate();
 
-            try (ResultSet resultSet = statement.getGeneratedKeys();) {
+            try (ResultSet resultSet = statement.getGeneratedKeys()) {
 
                 if (resultSet.next()) {
                     primaryKey = resultSet.getInt(1);
@@ -75,9 +74,10 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    // update details of existing Member
     public int updateMember(int memberID, String newAddress, int newPhone) {
         String query;
-        int result = 0;
+        int result = -1;
 
         if (!newAddress.isEmpty()) {
             query = "UPDATE Member "
@@ -88,7 +88,7 @@ public class LibraryDAO extends BaseDAO {
                     + "SET Phone = ? "
                     + "WHERE Member_ID = ?";
         }
-        try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query);) {
+        try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query)) {
 
             if (!newAddress.isEmpty()) {
                 statement.setString(1, newAddress);
@@ -107,10 +107,11 @@ public class LibraryDAO extends BaseDAO {
             System.out.println("Failure!");
             throwables.printStackTrace();
 
-            return 0;
+            return result;
         }
     }
 
+    // overloaded method to search Member based on Member ID
     public Member searchMember(int memberID) {
         Member member = null;
         String query = "SELECT * " +
@@ -118,7 +119,7 @@ public class LibraryDAO extends BaseDAO {
                 "WHERE Member_ID = ?";
 
         try (Connection connection = getConn();
-             PreparedStatement statement = connection.prepareStatement(query);) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, memberID);
 
@@ -148,6 +149,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    // overloaded method to search Member based on Member name
     public ArrayList<Member> searchMember(String name) {
         ArrayList<Member> members = new ArrayList<Member>();
         String query = "SELECT * " +
@@ -155,7 +157,7 @@ public class LibraryDAO extends BaseDAO {
                 "WHERE LastName = ?";
 
         try (Connection connection = getConn();
-             PreparedStatement statement = connection.prepareStatement(query);) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, name);
 
@@ -186,6 +188,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    // method displays library catalog
     public void showBooks() {
         try (Connection c = getConn()) {
             Statement s = c.createStatement();
@@ -211,6 +214,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    // method to manually add Books to the library
     public ArrayList<Integer> addBook(ArrayList<Book> bookBatch) {
         ArrayList<Integer> primaryKeys = new ArrayList<Integer>();
 
@@ -219,7 +223,7 @@ public class LibraryDAO extends BaseDAO {
                 "VALUES (?, ?)";
 
         try (Connection connection = getConn();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             for (Book book : bookBatch) {
 
@@ -231,7 +235,7 @@ public class LibraryDAO extends BaseDAO {
 
             statement.executeBatch();
 
-            try (ResultSet resultSet = statement.getGeneratedKeys();) {
+            try (ResultSet resultSet = statement.getGeneratedKeys()) {
                 while (resultSet.next()) {
                     primaryKeys.add(resultSet.getInt(1));
                 }
@@ -244,6 +248,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    // method used to mass insert Books using CSV input
     public void addBookcsv(String csvLoc) {
         try {
 
@@ -256,18 +261,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
-    public void addBookcsv() {
-        try {
-
-            CSVLoader loader = new CSVLoader(getConn());
-
-            loader.loadCSV("C:\\Users\\olivier.thas\\OneDrive - Dimension Data\\Documents\\Load sample1.csv", "Book");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    // overloaded method to search Books based on Book ID
     public Book searchBook(int bookID) {// parameters added to search on title or author. Send back multiple instances via ArrayList
         Book book = null;
         String query = "SELECT * " +
@@ -279,7 +273,7 @@ public class LibraryDAO extends BaseDAO {
 
             statement.setInt(1, bookID);
 
-            try (ResultSet resultSet = statement.executeQuery();) {
+            try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     int retrievedBookID = resultSet.getInt("Book_ID");
                     String title = resultSet.getString("Title");
@@ -298,8 +292,9 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    // overloaded method to search Books based on Book title or author
     public ArrayList<Book> searchBook(String title, String author) {
-        Book book = null;
+        Book book;
         ArrayList<Book> books = new ArrayList<>();
         String query;
 
@@ -319,7 +314,7 @@ public class LibraryDAO extends BaseDAO {
 
             if (!title.isEmpty()) {
                 statement.setString(1, title);
-                try (ResultSet resultSet = statement.executeQuery();) {
+                try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         int retrievedBookID = resultSet.getInt("Book_ID");
                         String retrievedTitle = resultSet.getString("Title");
@@ -333,7 +328,7 @@ public class LibraryDAO extends BaseDAO {
                 return books;
             } else {
                 statement.setString(1, author);
-                try (ResultSet resultSet = statement.executeQuery();) {
+                try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         int retrievedBookID = resultSet.getInt("Book_ID");
                         String retrievedTitle = resultSet.getString("Title");
@@ -355,6 +350,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    // method used to record the lending of Books to Members
     public int[] issueBook(int memberID, Book book, GregorianCalendar parameterDueDate) {
         int[] affectedRecord = new int[2];
         Date dueDate = new Date(parameterDueDate.getTimeInMillis());
@@ -392,6 +388,7 @@ public class LibraryDAO extends BaseDAO {
         }
     }
 
+    // method used to record the returning of Books by Members
     public GregorianCalendar returnBook(Book book, GregorianCalendar parameterReturnDate) {
         int borrowID = 0;
         GregorianCalendar dueDate = new GregorianCalendar();

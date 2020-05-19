@@ -12,7 +12,7 @@ public class DatabaseSingleton {
     public DatabaseSingleton() {
     }
 
-    public static DatabaseSingleton getInstance(){
+    public static DatabaseSingleton getInstance() {
         if (instance == null)
             instance = new DatabaseSingleton();
         return instance;
@@ -25,8 +25,8 @@ public class DatabaseSingleton {
 
     public Connection getConnection() {
         try {
-            if (connection == null || connection.isClosed()){
-                connection = DriverManager.getConnection("jdbc:mysql://dt5.ehb.be/1920mobappgr2","1920mobappgr2","jWqB5N4");
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection("jdbc:mysql://dt5.ehb.be/1920mobappgr2", "1920mobappgr2", "jWqB5N4");
             }
         } catch (SQLException e) {
             e.printStackTrace();

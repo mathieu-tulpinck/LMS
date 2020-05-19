@@ -3,7 +3,6 @@ package db;
 import java.sql.*;
 
 import library.Librarian;
-import library.Member;
 import security.*;
 
 public class LibrarianDAO extends BaseDAO {
@@ -14,7 +13,6 @@ public class LibrarianDAO extends BaseDAO {
             String stringQuery = "SELECT password FROM Librarian WHERE username = '" + username + "'";
             //System.out.println(stringQuery);
             ResultSet rs = s.executeQuery(stringQuery);
-            int count = 0;
             while (rs.next()) {
                 String saltedPassword = rs.getString("password");
                 PasswordAuthentication pwa = new PasswordAuthentication(10);
@@ -41,7 +39,7 @@ public class LibrarianDAO extends BaseDAO {
                 "VALUES (?, ?, ?, ?)";
 
         try (Connection connection = getConn();//try-with-resources statement
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, librarian.getFirstName());
             statement.setString(2, librarian.getLastName());
             statement.setString(3, librarian.getUsername());
@@ -49,7 +47,7 @@ public class LibrarianDAO extends BaseDAO {
 
             statement.executeUpdate();
 
-            try (ResultSet resultSet = statement.getGeneratedKeys();) {
+            try (ResultSet resultSet = statement.getGeneratedKeys()) {
 
                 if (resultSet.next()) {
                     primaryKey = resultSet.getInt(1);

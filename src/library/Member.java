@@ -18,23 +18,12 @@ public class Member {
 
 
     public Member() {
-
     }
 
-    public Member(String name, String address, int phone) {
+    public Member(String firstName, String lastName, String address, int phone) {
         this.membershipType = MembershipEnum.NORMAL;
-        setLastName(name);
-        setAddress(address);
-        setPhone(phone);
-        startDateMembership = new GregorianCalendar();
-        endDateMembership = new GregorianCalendar();
-        endDateMembership.add(GregorianCalendar.YEAR, DURATION);
-    }
-
-    public Member(String firstname, String lastname, String address, int phone) {
-        this.membershipType = MembershipEnum.NORMAL;
-        setFirstName(firstname);
-        setLastName(lastname);
+        setFirstName(firstName);
+        setLastName(lastName);
         setAddress(address);
         setPhone(phone);
         startDateMembership = new GregorianCalendar();
@@ -47,18 +36,17 @@ public class Member {
         this.startDateMembership = startDateMembership;
         this.endDateMembership = endDateMembership;
         System.out.println(mb);
-        switch (mb)
-        {
-            case"STUDENT":
+        switch (mb) {
+            case "STUDENT":
                 this.membershipType = MembershipEnum.STUDENT;
                 break;
-            case"SENIOR":
+            case "SENIOR":
                 this.membershipType = MembershipEnum.SENIOR;
                 break;
-            case"JUNIOR":
+            case "JUNIOR":
                 this.membershipType = MembershipEnum.JUNIOR;
                 break;
-            case"NORMAL":
+            case "NORMAL":
             default:
                 this.membershipType = MembershipEnum.NORMAL;
                 break;
@@ -146,10 +134,10 @@ public class Member {
     public Member createMember(Scanner console) {
 
         System.out.println("Provide first name");
-        String firstname = console.next();
+        String firstName = console.next();
 
         System.out.println("Provide last name");
-        String lastname = console.next();
+        String lastName = console.next();
 
         System.out.println("Provide address");
         String address = console.next();
@@ -157,16 +145,21 @@ public class Member {
         System.out.println("Provide phone");
         int phone = console.nextInt();
 
-        Member member = new Member(firstname, lastname, address, phone);
+        Member member = new Member(firstName, lastName, address, phone);
 
         return member;
     }
 
+    // method used to determine the Membership Type of a Member
     public void chooseMembershipType(Scanner console, Member member) {
 
         int choice;
         System.out.println("Provide type of membership: 1 = junior, 2 = student, 3 = senior");// user input should be restricted to enums
         choice = console.nextInt();
+        while (!(choice > 0) || !(choice < 4)) {
+            System.out.println("Input invalid. Try again");
+            choice = console.nextInt();
+        }
         switch (choice) {
             case 1:
                 member.membershipType = MembershipEnum.JUNIOR;
@@ -180,10 +173,11 @@ public class Member {
         }
     }
 
+    // method returns true if the membership of a Member is still valid
     public boolean checkMembershipValidity(Member borrower) {
         GregorianCalendar currentDate = new GregorianCalendar();
 
-        if (borrower.getEndDateMembership().compareTo(currentDate) > 0) {// positive if endDate membership is after currentDate
+        if (borrower.getEndDateMembership().compareTo(currentDate) > 0) {
             System.out.println("Membership valid.");
             return true;
         } else {

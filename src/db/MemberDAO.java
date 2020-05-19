@@ -9,9 +9,8 @@ import library.*;
 
 public class MemberDAO extends BaseDAO {
 
-    public Member getMember (int memberId)
-    {
-        try(Connection c = getConn()){
+    public Member getMember(int memberId) {
+        try (Connection c = getConn()) {
             Statement s = c.createStatement();
             String stringQuery = "SELECT Member_ID, MembershipType, StartDate, EndDate FROM Member WHERE Member_ID =  " + memberId;
             ResultSet rs = s.executeQuery(stringQuery);
@@ -29,21 +28,19 @@ public class MemberDAO extends BaseDAO {
                 startGregorianCalendar.setTime(endDate);
 
 
-
-                Member member = new Member(memberId, membershipType, startGregorianCalendar, endGregorianCalendar );
+                Member member = new Member(memberId, membershipType, startGregorianCalendar, endGregorianCalendar);
 
                 return member;
             }
-        } catch (SQLException throwables){
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
             System.out.println("Problem!");
         }
         return null;
     }
 
-    //Extend End date with 1 year and display price to pay
-    public int extendMembershipYear (int memberId)
-    {
+    //Extend End Date membership with 1 year and display price to pay
+    public int extendMembershipYear(int memberId) {
         String query;
         int result = 0;
 
@@ -51,7 +48,7 @@ public class MemberDAO extends BaseDAO {
                 + "SET EndDate = DATE_ADD(EndDate, INTERVAL 1 YEAR) "
                 + "WHERE Member_ID = ?";
 
-        try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query);) {
+        try (Connection connection = getConn(); PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, memberId); //Pass memberID
             result = statement.executeUpdate();

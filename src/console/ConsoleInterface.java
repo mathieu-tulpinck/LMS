@@ -32,14 +32,14 @@ public class ConsoleInterface {
             System.out.println("1. Add member");
             System.out.println("2. Modify details of a member");
             System.out.println("3. Add books");
-            System.out.println("4. Issue books");
-            System.out.println("5. Mass upload of books (csv-file)");
-
-            System.out.println("8. Show books");
-            System.out.println("9. Add librarian");
-            System.out.println("10. Extend Membership");
-            System.out.println("11. Logout");
-            System.out.println("12. Exit");
+            System.out.println("4. Mass upload of books (csv-file)");
+            System.out.println("5. Issue books");
+            System.out.println("6. Return books");
+            System.out.println("7. Show books");
+            System.out.println("8. Add librarian");
+            System.out.println("9. Extend Membership");
+            System.out.println("10. Logout");
+            System.out.println("11. Exit");
 
             choice = takeInput(console);
 
@@ -57,32 +57,36 @@ public class ConsoleInterface {
                     break;
 
                 case 4:
-                    issueBook(lib, console);
-                    break;
-
-                case 5:
                     loadCSVBooks(lib, console);
                     break;
 
-                case 8:
+                case 5:
+                    issueBook(lib, console);
+                    break;
+
+                /*case 6:
+                    returnBook(lib, console);
+                    break;*/
+                
+                case 7:
                     showBooks(lib);
                     break;
 
-                case 9:
+                case 8:
                     addLibrarian(librarianDAO, console);
                     break;
 
-                case 10:
+                case 9:
                     extendMembership(memberDAO, console);
                     break;
 
-                case 11:
+                case 10:
                     userLoggedin = false; //user gets logged out
                     System.out.println(userNameLibrarian + " succesfully logged out");
                     login(librarianDAO, console);
                     break;
 
-                case 12:
+                case 11:
                     System.out.println("LMS shutting down...");
                     break;
 
@@ -186,6 +190,22 @@ public class ConsoleInterface {
         }
     }
 
+    //case 5
+    public static void loadCSVBooks(LibraryDAO lib, Scanner console) {
+        try {
+            console.useDelimiter(";|\r?\n|\r");
+            System.out.println("Enter the csv file (no spaces) and its location: (e.g. C:\\Users\\olivier.thas\\Downloads\\Loadsample1.csv)");
+            System.out.println("Consider a csv format with header columns Title, Author and BookState");
+            String csvLocation = console.next();
+            lib.addBookcsv(csvLocation);
+
+//            lib.addBookcsv();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     //case 4
     public static void issueBook(LibraryDAO lib, Scanner console){// Limit number of simultaneous book loans
         Member borrower;
@@ -230,21 +250,7 @@ public class ConsoleInterface {
         }
     }
 
-    //case 5
-    public static void loadCSVBooks(LibraryDAO lib, Scanner console) {
-        try {
-            console.useDelimiter(";|\r?\n|\r");
-            System.out.println("Enter the csv file (no spaces) and its location: (e.g. C:\\Users\\olivier.thas\\Downloads\\Loadsample1.csv)");
-            System.out.println("Consider a csv format with header columns Title, Author and BookState");
-            String csvLocation = console.next();
-            lib.addBookcsv(csvLocation);
 
-//            lib.addBookcsv();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     //initialize calendar for loans
     public static GregorianCalendar getDueDate() {

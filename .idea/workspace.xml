@@ -11,13 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6ff1a72c-8838-4bc4-a917-0154e133b273" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/mysql_mysql_connector_java_8_0_20.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/protobuf-java-3.6.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/library/Librarian.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/com_opencsv_opencsv_5_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_8_0_20.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LMS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/LMS.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console/ConsoleInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/console/ConsoleInterface.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +131,8 @@
       <workItem from="1589442469362" duration="44830000" />
       <workItem from="1589631625754" duration="7613000" />
       <workItem from="1589746448045" duration="1696000" />
+      <workItem from="1589839829789" duration="218000" />
+      <workItem from="1589863923808" duration="506000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;This is my third commit&quot;">
       <created>1588691076913</created>
@@ -221,7 +218,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589746524822</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Librarian fixed">
+      <created>1589839889149</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1589839889149</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -249,7 +253,8 @@
     <MESSAGE value="partial migration code Mathieu + login user interface + extendMembership for invoicing" />
     <MESSAGE value="commented unnecessary souts and translated text to user in English" />
     <MESSAGE value="test commit delimiter" />
-    <option name="LAST_COMMIT_MESSAGE" value="test commit delimiter" />
+    <MESSAGE value="Librarian fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Librarian fixed" />
   </component>
   <component name="WindowStateProjectService">
     <state x="451" y="108" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589836012824">

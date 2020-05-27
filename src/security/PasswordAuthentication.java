@@ -12,46 +12,22 @@ import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-/**
- * Hash passwords for storage, and test passwords against password tokens.
- * <p>
- * Instances of this class can be used concurrently by multiple threads.
- *
- * @author erickson
- * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
- */
+//Salting, thx to StackOverflow
+
 public final class PasswordAuthentication {
 
-    /**
-     * Each token produced by this class uses this identifier as a prefix.
-     */
     public static final String ID = "$31$";
-
-    /**
-     * The minimum recommended cost, used by default
-     */
     public static final int DEFAULT_COST = 16;
-
     private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
-
     private static final int SIZE = 128;
-
     private static final Pattern layout = Pattern.compile("\\$31\\$(\\d\\d?)\\$(.{43})");
-
     private final SecureRandom random;
-
     private final int cost;
-
     public PasswordAuthentication() {
         this(DEFAULT_COST);
     }
 
-    /**
-     * Create a password manager with a specified cost
-     *
-     * @param cost the exponential computational cost of hashing a password, 0 to 30
-     */
-    public PasswordAuthentication(int cost) {
+        public PasswordAuthentication(int cost) {
         iterations(cost); /* Validate cost */
         this.cost = cost;
         this.random = new SecureRandom();
@@ -63,12 +39,8 @@ public final class PasswordAuthentication {
         return 1 << cost;
     }
 
-    /**
-     * Hash a password for storage.
-     *
-     * @return a secure authentication token to be stored for later authentication
-     */
-    public String hash(char[] password) {
+    //Hash a password for storage, @return a secure authentication token to be stored for later authentication
+        public String hash(char[] password) {
         byte[] salt = new byte[SIZE / 8];
         random.nextBytes(salt);
         byte[] dk = pbkdf2(password, salt, 1 << cost);
@@ -79,11 +51,7 @@ public final class PasswordAuthentication {
         return ID + cost + '$' + enc.encodeToString(hash);
     }
 
-    /**
-     * Authenticate with a password and a stored password token.
-     *
-     * @return true if the password and token match
-     */
+    //return true if password and token match
     public boolean authenticate(char[] password, String token) {
         Matcher m = layout.matcher(token);
         if (!m.matches())
@@ -110,26 +78,11 @@ public final class PasswordAuthentication {
         }
     }
 
-    /**
-     * Hash a password in an immutable {@code String}.
-     *
-     * <p>Passwords should be stored in a {@code char[]} so that it can be filled
-     * with zeros after use instead of lingering on the heap and elsewhere.
-     *
-     * @deprecated Use {@link #hash(char[])} instead
-     */
     @Deprecated
     public String hash(String password) {
         return hash(password.toCharArray());
     }
 
-    /**
-     * Authenticate with a password in an immutable {@code String} and a stored
-     * password token.
-     *
-     * @see #hash(String)
-     * @deprecated Use {@link #authenticate(char[], String)} instead.
-     */
     @Deprecated
     public boolean authenticate(String password, String token) {
         return authenticate(password.toCharArray(), token);

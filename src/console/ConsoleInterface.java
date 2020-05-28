@@ -425,7 +425,7 @@ public class ConsoleInterface {
             int bookID = console.nextInt();
 
             book = lib.searchBook(bookID);// search on books
-            if (book != null) {
+            if (book != null && book.getBookState() == BookStateEnum.ISSUED) {
                 dueDate = lib.returnBook(book, returnDate);
                 if (dueDate.isSet(GregorianCalendar.YEAR)) {
                     System.out.println("Book return inserted in db ");
@@ -433,8 +433,10 @@ public class ConsoleInterface {
                 } else {
                     System.out.println("Process failed");
                 }
-            } else {
+            } else if (book == null) {
                 System.out.println("Book does not exist");
+            } else if (book.getBookState() == BookStateEnum.AVAILABLE) {
+                System.out.println("Book already returned");
             }
 
             System.out.println("Return more books?");
@@ -466,11 +468,9 @@ public class ConsoleInterface {
         GregorianCalendar currentDate = new GregorianCalendar();
 
         if (dueDate.compareTo(currentDate) < 0) {
-            if (dueDate.compareTo(currentDate) < 0) {
-                System.out.println("Book brought back after due date. Fine to be charged");
-            } else {
-                System.out.println("Book brought back in time");
-            }
+            System.out.println("Book brought back after due date. Fine to be charged");
+        } else {
+            System.out.println("Book brought back in time");
         }
     }
 }
